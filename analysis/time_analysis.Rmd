@@ -8,28 +8,47 @@ library(tidyverse)
 ```
 
 ```{r}
-filename <- 'dog.stats.csv'
-dogs <- read_csv(filename)
+filename <- 'data/dog.stats.csv'
+dogs_org <- read_csv(filename)
 ```
 
 ```{r}
-dogs <- dogs %>% mutate(drawing_time_seconds = drawing_time / 1000, drawing_time_draw_seconds = drawing_time_draw / 1000, drawing_time_pause_seconds = drawing_time_pause / 1000)
+filename <- 'data/cat.stats.csv'
+cats_org <- read_csv(filename)
 ```
+
+## Clean Data
 
 ```{r}
-#function 
+cats_org %>% filter(stroke_in_order > 0) %>% count()
+cats_org %>% filter(drawing_time_min > 0) %>% count()
+cats_org %>% filter(drawing_time_min > 0) 
+cats_org %>% filter(drawing_time_draw <= 100)
+max(dogs$drawing_time_min)
+```
+
+
+
+```{r}
+prepare_data <- function (data) {
+  new_data <- data %>% mutate(drawing_time_seconds = drawing_time / 1000, drawing_time_draw_seconds = drawing_time_draw / 1000, drawing_time_pause_seconds = drawing_time_pause / 1000)
+  
+  new_data <- new_data %>% 
+    # a few have time values not in incremental
+    filter(stroke_in_order == 0) %>% 
+    # a few have weird times
+    filter(drawing_time_min >= 0) %>% 
+    filter(drawing_time_max > 0) %>%
+    filter(drawing_time_draw > 100)
+  return(new_data)
+}
 ```
 
 
 ```{r}
-#dog_drawings <- dogs %>% group_by(key_id) %>% filter(row_number(key_id) == 1)
-
+dogs <- prepare_data(dogs_org)
+cats <- prepare_data(cats_org)
 ```
-
-```{r}
-#dog_drawings <- dog_drawings %>% select(key_id, recognized, stroke_count, drawing_time, drawing_time_seconds, word, countrycode)
-```
-
 
 
 ```{r}
@@ -44,18 +63,6 @@ dogs %>%
   ggplot(aes(x = drawing_time_draw_seconds, fill = recognized)) +
   geom_histogram(binwidth = 1) + 
   labs(title = "Histogram of Dog Drawing Time")
-```
-
-
-```{r}
-filename <- 'cat.stats.csv'
-cats <- read_csv(filename)
-
-#cats <- cats %>% mutate(drawing_time_seconds = drawing_time / 1000)
-cats <- cats %>% mutate(drawing_time_seconds = drawing_time / 1000, drawing_time_draw_seconds = drawing_time_draw / 1000, drawing_time_pause_seconds = drawing_time_pause / 1000)
-#cat_drawings <- cats %>% group_by(key_id) %>% filter(row_number(key_id) == 1)
-#cat_drawings <- cat_drawings %>% select(key_id, recognized, stroke_count, drawing_time, drawing_time_seconds, word, countrycode)
-
 ```
 
 
@@ -86,8 +93,6 @@ dogs_cats_rec_sum %>%
 ```{r}
 cats_rec <- cats %>% filter(recognized == 'True')
 dogs_rec <- dogs %>% filter(recognized == 'True')
-
-
 ```
 
 ```{r}
@@ -96,10 +101,39 @@ dogs_rec <- dogs %>% filter(recognized == 'True')
 
 
 ```{r}
-  ggplot() +
+ggplot() +
   geom_histogram(data = cats_rec, aes(x = drawing_time_seconds, y = (..count..)/sum(..count..)), alpha = 0.6, fill = 'red', binwidth = 1) +
   geom_histogram(data = dogs_rec, aes(x = drawing_time_seconds, y = (..count..)/sum(..count..)), alpha = 0.6, fill = 'blue', binwidth = 1) +
-  scale_x_continuous(limits = c(0, 30)) + 
+  #scale_x_continuous(limits = c(0, 30)) + 
+  scale_y_continuous(labels = scales::percent) +
+  labs(title = "Distribution of Total Seconds Taken for Drawing a cat vs a dog", y = "", x = "Drawing Time (sec)")
+  
+```
+
+
+```{r}
+dogs_cats %>% filter(drawing_time_seconds > 20) %>% count()
+dogs_cats %>% filter(drawing_time_seconds > 20) %>% count() / nrow(dogs_cats)
+```
+
+```{r}
+summary(dogs_rec$drawing_time_seconds)
+summary(cats_rec$drawing_time_seconds)
+```
+
+
+```{r}
+dogs_cats %>% filter(drawing_time_seconds > 20) %>%
+  ggplot(aes(x = word, y = drawing_time_pause_seconds)) + 
+  geom_boxplot()
+```
+
+
+```{r}
+ggplot() +
+  geom_histogram(data = cats_rec, aes(x = drawing_time_seconds, y = (..count..)/sum(..count..)), alpha = 0.6, fill = 'red', binwidth = 1) +
+  geom_histogram(data = dogs_rec, aes(x = drawing_time_seconds, y = (..count..)/sum(..count..)), alpha = 0.6, fill = 'blue', binwidth = 1) +
+  scale_x_continuous(limits = c(0, 25)) + 
   scale_y_continuous(labels = scales::percent) +
   labs(title = "Distribution of Total Seconds Taken for Drawing a cat vs a dog", y = "", x = "Drawing Time (sec)")
   
@@ -109,18 +143,37 @@ dogs_rec <- dogs %>% filter(recognized == 'True')
   ggplot() +
   geom_histogram(data = cats_rec, aes(x = drawing_time_draw / 1000, y = (..count..)/sum(..count..)), alpha = 0.6, fill = 'red', binwidth = 1) +
   geom_histogram(data = dogs_rec, aes(x = drawing_time_draw / 1000, y = (..count..)/sum(..count..)), alpha = 0.6, fill = 'blue', binwidth = 1) +
-  scale_x_continuous(limits = c(0, 30)) + 
+  scale_x_continuous(limits = c(0, 25)) + 
   scale_y_continuous(labels = scales::percent) +
   labs(title = "Distribution of Drawing Seconds Taken for Drawing a cat vs a dog", y = "", x = "Drawing Time (sec)")
 ```
 
+## Sample Data
 
+Test if the different n sizes affecting data.
+
+```{r}
+cats_rec_sample <- cats_rec %>% sample_n(50000)
+dogs_rec_sample <- dogs_rec %>% sample_n(50000)
+```
+
+
+```{r}
+  ggplot() +
+  geom_histogram(data = cats_rec_sample, aes(x = drawing_time_draw_seconds, y = (..count..)/sum(..count..)), alpha = 0.6, fill = 'red', binwidth = 1) +
+  geom_histogram(data = dogs_rec_sample, aes(x = drawing_time_draw_seconds, y = (..count..)/sum(..count..)), alpha = 0.6, fill = 'blue', binwidth = 1) +
+  scale_x_continuous(limits = c(0, 25)) + 
+  scale_y_continuous(labels = scales::percent) +
+  labs(title = "Distribution of Drawing Seconds Taken for Drawing a cat vs a dog", y = "", x = "Drawing Time (sec)")
+```
+
+## Pause Time
 
 ```{r}
   ggplot() +
   geom_histogram(data = cats_rec, aes(x = drawing_time_pause / 1000, y = (..count..)/sum(..count..)), alpha = 0.6, fill = 'red', binwidth = 1) +
   geom_histogram(data = dogs_rec, aes(x = drawing_time_pause / 1000, y = (..count..)/sum(..count..)), alpha = 0.6, fill = 'blue', binwidth = 1) +
-  scale_x_continuous(limits = c(0, 30)) + 
+  #scale_x_continuous(limits = c(0, 30)) + 
   scale_y_continuous(labels = scales::percent) +
   labs(title = "Distribution of Pause Seconds Taken for Drawing a cat vs a dog", y = "", x = "Drawing Time (sec)")
 ```
@@ -128,8 +181,8 @@ dogs_rec <- dogs %>% filter(recognized == 'True')
 
 
 ```{r}
-mean(cat_drawings_rec$drawing_time_seconds)
-mean(dog_drawings_rec$drawing_time_seconds)
+mean(cats_rec$drawing_time_seconds)
+mean(dogs_rec$drawing_time_seconds)
 ```
 
 
@@ -145,9 +198,9 @@ mean(dogs_rec$stroke_count)
 ```
 
 ```{r}
-dogs_rec %>%
+dogs_rec %>% filter(drawing_time_draw_seconds < 30) %>%
   ggplot(aes(x = drawing_time_draw_seconds, y = stroke_count)) +
-  geom_point(alpha = 1 / 10)
+  geom_point(alpha = 1 / 100)
   
 ```
 
@@ -158,15 +211,53 @@ cats_rec %>%
   
 ```
 
-```{r}
-cats_rec %>% filter(drawing_time_draw_seconds < 0) %>% mutate(k = as.character(key_id))
-```
 
 
 
 ```{r}
-countrycodes <- dog_drawings %>% group_by(countrycode) %>% summarise(count = n()) %>% arrange(-count)
+countrycodes_dogs <- dogs_rec %>% group_by(countrycode) %>% summarise(country_count = n()) %>% arrange(-country_count)
+countrycodes_cats <- cats_rec %>% group_by(countrycode) %>% summarise(country_count = n()) %>% arrange(-country_count)
 ```
+
+```{r}
+top_countrycodes <- countrycodes_dogs %>% head(n = 20)
+```
+
+```{r}
+dogs_rec_top_countries <- dogs_rec %>% filter(countrycode %in% top_countrycodes$countrycode)
+
+dogs_rec_top_countries <- dogs_rec_top_countries %>% left_join(top_countrycodes, by = "countrycode")
+```
+
+```{r}
+dogs_rec_top_countries %>% filter(drawing_time_draw_seconds < 30) %>%
+  ggplot(aes(x = drawing_time_draw_seconds)) +
+  facet_wrap(~ countrycode) +
+  geom_histogram(aes(y=(..count..)/tapply(..count..,..PANEL..,sum)[..PANEL..]), binwidth = 1) 
+```
+
+```{r}
+dogs_rec_top_countries %>% filter(drawing_time_draw_seconds < 30) %>%
+  ggplot(aes(x = drawing_time_draw_seconds)) +
+  facet_wrap(~ countrycode) +
+  geom_histogram(aes(y=(..count..)/tapply(..count..,..PANEL..,sum)[..PANEL..]), binwidth = 1) 
+  
+```
+
+
+```{r}
+dogs_rec_top_countries %>% filter(drawing_time_draw_seconds < 30) %>%
+  ggplot(aes(x = drawing_time_pause_seconds)) +
+  facet_wrap(~ countrycode) +
+  geom_histogram(aes(y=(..count..)/tapply(..count..,..PANEL..,sum)[..PANEL..]), binwidth = 1) 
+  
+```
+
+
+
+
+
+
 
 
 
