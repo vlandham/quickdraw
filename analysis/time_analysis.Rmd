@@ -141,8 +141,8 @@ ggplot() +
 
 ```{r}
   ggplot() +
-  geom_histogram(data = cats_rec, aes(x = drawing_time_draw / 1000, y = (..count..)/sum(..count..)), alpha = 0.6, fill = 'red', binwidth = 1) +
-  geom_histogram(data = dogs_rec, aes(x = drawing_time_draw / 1000, y = (..count..)/sum(..count..)), alpha = 0.6, fill = 'blue', binwidth = 1) +
+  geom_histogram(data = cats_rec, aes(x = drawing_time_draw_seconds, y = (..count..)/sum(..count..)), alpha = 0.6, fill = 'red', binwidth = 1) +
+  geom_histogram(data = dogs_rec, aes(x = drawing_time_draw_seconds, y = (..count..)/sum(..count..)), alpha = 0.6, fill = 'blue', binwidth = 1) +
   scale_x_continuous(limits = c(0, 25)) + 
   scale_y_continuous(labels = scales::percent) +
   labs(title = "Distribution of Drawing Seconds Taken for Drawing a cat vs a dog", y = "", x = "Drawing Time (sec)")
@@ -220,7 +220,7 @@ countrycodes_cats <- cats_rec %>% group_by(countrycode) %>% summarise(country_co
 ```
 
 ```{r}
-top_countrycodes <- countrycodes_dogs %>% head(n = 20)
+top_countrycodes <- countrycodes_dogs %>% head(n = 30)
 ```
 
 ```{r}
@@ -246,7 +246,7 @@ dogs_rec_top_countries %>% filter(drawing_time_draw_seconds < 30) %>%
 
 
 ```{r}
-dogs_rec_top_countries %>% filter(drawing_time_draw_seconds < 30) %>%
+dogs_rec_top_countries %>% filter(drawing_time_pause_seconds < 15) %>%
   ggplot(aes(x = drawing_time_pause_seconds)) +
   facet_wrap(~ countrycode) +
   geom_histogram(aes(y=(..count..)/tapply(..count..,..PANEL..,sum)[..PANEL..]), binwidth = 1) 
