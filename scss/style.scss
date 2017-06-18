@@ -1,0 +1,28 @@
+//fonts
+$font_0: Georgia;
+$font_1: Times New Roman;
+$font_2: Serif;
+
+body {
+  font-family: $font_0, $font_1, $font_2;
+}
+
+h1 {
+  text-align: center;
+  margin: auto;
+}
+
+.text {
+  max-width: 60rem;
+  margin: 2rem auto;
+}
+
+.dog {
+  fill: yellow;
+  opacity: 0.6;
+}
+
+.cat {
+  fill: green;
+  opacity: 0.6;
+}
