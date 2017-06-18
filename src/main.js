@@ -7,12 +7,14 @@ import '../index.html';
 import './style';
 
 const draw = createDraw();
+const limitDraw = createDraw().limit(14);
 const hist = createHist();
 
 function display(error, dogs, cats, data) {
   console.log(error);
   draw('#dogs', dogs);
-  draw('#cats', cats);
+  limitDraw('#dogs-title', dogs);
+  limitDraw('#cats', cats);
   hist('#hist', data);
 }
 

@@ -7,6 +7,17 @@ body {
   font-family: $font_0, $font_1, $font_2;
 }
 
+.nav {
+  height: 40px;
+  background-color: #424242;
+
+  p {
+    padding-left: 2rem;
+    padding-right: 2rem;
+    padding-top: 8px;
+  }
+}
+
 h1 {
   text-align: center;
   margin: auto;
@@ -17,12 +28,14 @@ h1 {
   margin: 2rem auto;
 }
 
+.bar rect {
+  opacity: 0.5;
+}
+
 .dog {
-  fill: yellow;
-  opacity: 0.6;
+  fill: #0091EA;
 }
 
 .cat {
-  fill: green;
-  opacity: 0.6;
+  fill: #C62828;
 }

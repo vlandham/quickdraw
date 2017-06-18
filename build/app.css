@@ -1,6 +1,14 @@
 body {
   font-family: Georgia, Times New Roman, Serif; }
 
+.nav {
+  height: 40px;
+  background-color: #424242; }
+  .nav p {
+    padding-left: 2rem;
+    padding-right: 2rem;
+    padding-top: 8px; }
+
 h1 {
   text-align: center;
   margin: auto; }
@@ -9,12 +17,13 @@ h1 {
   max-width: 60rem;
   margin: 2rem auto; }
 
+.bar rect {
+  opacity: 0.5; }
+
 .dog {
-  fill: yellow;
-  opacity: 0.6; }
+  fill: #0091EA; }
 
 .cat {
-  fill: green;
-  opacity: 0.6; }
+  fill: #C62828; }
 
 /*# sourceMappingURL=app.css.map*/

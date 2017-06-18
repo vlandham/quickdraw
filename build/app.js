@@ -67,12 +67,14 @@
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
 	var draw = (0, _draw2.default)();
+	var limitDraw = (0, _draw2.default)().limit(14);
 	var hist = (0, _hist2.default)();
 	
 	function display(error, dogs, cats, data) {
 	  console.log(error);
 	  draw('#dogs', dogs);
-	  draw('#cats', cats);
+	  limitDraw('#dogs-title', dogs);
+	  limitDraw('#cats', cats);
 	  hist('#hist', data);
 	}
 	
@@ -16497,9 +16499,12 @@
 	function createDraw() {
 	  var width = 900;
 	  var height = 900;
-	  var margin = { top: 20, right: 20, bottom: 20, left: 20 };
+	  var margin = { top: 10, right: 20, bottom: 10, left: 20 };
 	  var g = null;
 	  var data = [];
+	  var limit = null;
+	  var rowCount = 14;
+	  var panelWidth = 64;
 	
 	  var line = d3.line().x(function (d) {
 	    return d[0];
@@ -16509,6 +16514,13 @@
 	
 	  var chart = function wrapper(selection, rawData) {
 	    data = rawData;
+	    filterData();
+	    rowCount = Math.floor(width / panelWidth);
+	    // console.log(rowCount);
+	    height = Math.floor(data.length / rowCount) * panelWidth;
+	    if (data.length % rowCount > 0) {
+	      height += panelWidth;
+	    }
 	
 	    var svg = d3.select(selection).append('svg').attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom);
 	
@@ -16516,11 +16528,17 @@
 	    update();
 	  };
 	
+	  function filterData() {
+	    if (limit) {
+	      data = data.slice(0, limit);
+	    }
+	  }
+	
 	  function update() {
 	    var panels = g.selectAll('.panel').data(data);
 	    var panelsE = panels.enter().append('g').attr('class', 'panel').attr('transform', function (d, i) {
-	      var x = i % 14 * 64;
-	      var y = Math.floor(i / 14) * 64;
+	      var x = i % rowCount * panelWidth;
+	      var y = Math.floor(i / rowCount) * panelWidth;
 	      return 'translate(' + x + ',' + y + ') scale(0.25)';
 	    });
 	
@@ -16529,7 +16547,37 @@
 	    }).enter().append('path').classed('stroke', true).style('fill', 'none').style('stroke', '#111').style('stroke-width', '2').attr('d', line);
 	  }
 	
-	  chart.limit = function (_) {};
+	  chart.limit = function setLimit(value) {
+	    if (!arguments.length) {
+	      return limit;
+	    }
+	    limit = value;
+	    return this;
+	  };
+	
+	  chart.rowCount = function setRowCount(value) {
+	    if (!arguments.length) {
+	      return rowCount;
+	    }
+	    rowCount = value;
+	    return this;
+	  };
+	
+	  chart.width = function setWidth(value) {
+	    if (!arguments.length) {
+	      return width;
+	    }
+	    width = value;
+	    return this;
+	  };
+	
+	  chart.panelWidth = function setPanelWidth(value) {
+	    if (!arguments.length) {
+	      return panelWidth;
+	    }
+	    panelWidth = value;
+	    return this;
+	  };
 	
 	  return chart;
 	}
