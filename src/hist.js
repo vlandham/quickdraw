@@ -34,21 +34,22 @@ export default function createHist() {
     const xMaxs = [];
     const yMins = [];
     const yMaxs = [];
-    data.ids.forEach((id) => {
+    data.keys.forEach((id) => {
       xMins.push(d3.min(data[id].hist, d => d.x1));
       xMaxs.push(d3.max(data[id].hist, d => d.x1));
       yMins.push(d3.min(data[id].hist, d => d.freq));
       yMaxs.push(d3.max(data[id].hist, d => d.freq));
     });
     // const xExtent = d3.extent(data.dog.hist, d => d.x1);
-    xScale.domain([0, d3.max(xMaxs)]);
+    // xScale.domain([0, d3.max(xMaxs)]);
+    xScale.domain([0, 25]);
 
     // const freqExtent = d3.extent(data.dog.hist, d => d.freq);
     yScale.domain([0, d3.max(yMaxs)]);
   }
 
   function update() {
-    data.ids.forEach((id) => {
+    data.keys.forEach((id) => {
       const idG = g.append('g')
         .classed(id, true);
       const bar = idG.selectAll('.bar')

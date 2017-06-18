@@ -21,5 +21,5 @@ function display(error, dogs, cats, data) {
 d3.queue()
   .defer(d3.json, 'data/dogs.json')
   .defer(d3.json, 'data/cats.json')
-  .defer(d3.json, 'data/data.json')
+  .defer(d3.json, 'data/dog_cat_out.json')
   .await(display);
