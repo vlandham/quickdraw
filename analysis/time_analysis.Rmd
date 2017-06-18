@@ -141,8 +141,8 @@ ggplot() +
 
 ```{r}
   ggplot() +
-  geom_histogram(data = cats_rec, aes(x = drawing_time_draw_seconds, y = (..count..)/sum(..count..)), alpha = 0.6, fill = 'red', binwidth = 1) +
-  geom_histogram(data = dogs_rec, aes(x = drawing_time_draw_seconds, y = (..count..)/sum(..count..)), alpha = 0.6, fill = 'blue', binwidth = 1) +
+  geom_histogram(data = cats_rec, aes(x = drawing_time_draw_seconds, y = (..count..)/sum(..count..)), alpha = 0.6, fill = 'red', binwidth = 1, center = 0, closed = 'left') +
+  geom_histogram(data = dogs_rec, aes(x = drawing_time_draw_seconds, y = (..count..)/sum(..count..)), alpha = 0.6, fill = 'blue', binwidth = 1, center = 0, closed = 'left') +
   scale_x_continuous(limits = c(0, 25)) + 
   scale_y_continuous(labels = scales::percent) +
   labs(title = "Distribution of Drawing Seconds Taken for Drawing a cat vs a dog", y = "", x = "Drawing Time (sec)")

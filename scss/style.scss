@@ -30,13 +30,18 @@ h1 {
 }
 
 .bar rect {
-  opacity: 0.5;
+  // opacity: 0.7;
 }
 
 .dog {
-  fill: #0091EA;
+  // fill: #0091EA;
+  fill: #2962FF;
 }
 
 .cat {
   fill: #C62828;
+}
+
+.active rect {
+  opacity: 1.0;
 }
