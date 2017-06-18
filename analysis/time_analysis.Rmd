@@ -148,6 +148,26 @@ ggplot() +
   labs(title = "Distribution of Drawing Seconds Taken for Drawing a cat vs a dog", y = "", x = "Drawing Time (sec)")
 ```
 
+
+```{r}
+dogs_rec <- dogs_rec %>% mutate(time_bin = floor(drawing_time_draw_seconds))
+dog_bins <- dogs_rec %>% group_by(time_bin) %>% summarise(count = n()) %>% mutate( freq = count / sum(count))
+```
+
+```{r}
+cats_rec <- cats_rec %>% mutate(time_bin = floor(drawing_time_draw_seconds))
+cat_bins <- cats_rec %>% group_by(time_bin) %>% summarise(count = n()) %>% mutate( freq = count / sum(count))
+```
+
+```{r}
+dog_bins %>%
+  ggplot() + 
+  geom_bar(data = dog_bins, mapping = aes(x = time_bin, y = freq), stat='identity', fill = 'blue', alpha = 0.6) + 
+  geom_bar(data = cat_bins, mapping = aes(x = time_bin, y = freq), stat='identity', fill = 'red', alpha = 0.6) + 
+  scale_x_continuous(limits=c(0, 25))
+```
+
+
 ## Sample Data
 
 Test if the different n sizes affecting data.
