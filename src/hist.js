@@ -13,7 +13,9 @@ export default function createHist() {
   let xDomain = null;
   let histKey = 'hist';
   let keys = null;
-  let graphKeys = [];
+  // let graphKeys = [];
+  let showAvg = true;
+  let showDrawings = true;
 
   const xScale = d3.scaleLinear();
   const yScale = d3.scaleLinear();
@@ -64,8 +66,8 @@ export default function createHist() {
   }
 
 
-  function setupSvg(selection, mKeys) {
-    graphKeys = mKeys
+  function setupSvg(selection) {
+    // graphKeys = mKeys
     svg = d3.select(selection).append('svg')
       .attr('width', width + margin.left + margin.right)
       .attr('height', height + margin.top + margin.bottom);
@@ -92,6 +94,10 @@ export default function createHist() {
   }
 
   function setupAnnotations(aKeys) {
+    if (!showAvg) {
+      return;
+    }
+
     const means = aKeys.map((k) => {
       return {
         mean: +data[k].dt_sec_mean,
@@ -186,6 +192,7 @@ export default function createHist() {
           .attr('y', height + (margin.bottom / 2))
           .attr('dy', 10)
           .text(id);
+
         setupAnnotations([id]);
       }
     });
@@ -238,6 +245,18 @@ export default function createHist() {
   chart.keys = function setkeys(value) {
     if (!arguments.length) { return keys; }
     keys = value;
+    return this;
+  };
+
+  chart.showAvg = function setShowAvg(value) {
+    if (!arguments.length) { return showAvg; }
+    showAvg = value;
+    return this;
+  };
+
+  chart.showDrawings = function setShowDrawings(value) {
+    if (!arguments.length) { return showDrawings; }
+    showDrawings = value;
     return this;
   };
 

@@ -36,8 +36,26 @@ function display(error, dogCat, birds, bugs, shapes) {
   createHist().xDomain([0, 24]).keys(['dog'])('#dog-hist', dogCat);
   createHist().xDomain([0, 24]).keys(['dog', 'cat'])('#dogcat-hist', dogCat);
   createHist().xDomain([0, 24]).keys(['dog', 'cat', 'horse'])('#dogcathorse-hist', dogCat);
+
+  createHist()
+    .histKey('hist_stroke')
+    .xDomain([0, 24])
+    .showAvg(false)
+    .keys(['dog', 'cat', 'horse'])('#dogcathorse-strokes', dogCat);
+
+  createHist()
+    .histKey('hist_stroke')
+    .xDomain([0, 24])
+    .width(260)
+    .height(200)
+    .showAvg(false)
+    .overlap(false)
+    .keys(['dog', 'cat', 'horse'])('#dogcathorse-strokes-small', dogCat);
+
   // bird histogram
   createHist()
+    .histKey('hist')
+    .showAvg(true)
     .xDomain([0, 20])
     .width(200)
     .height(200)
@@ -50,12 +68,14 @@ function display(error, dogCat, birds, bugs, shapes) {
     .height(200)
     .keys(null)
     .overlap(false)('#bugs', bugs);
+
   createHist()
     .xDomain([0, 20])
     .width(200)
     .height(200)
     .keys(null)
     .overlap(false)('#shapes', shapes);
+
 }
 
 d3.queue()

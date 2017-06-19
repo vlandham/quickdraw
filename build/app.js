@@ -95,10 +95,16 @@
 	  (0, _hist2.default)().xDomain([0, 24]).keys(['dog'])('#dog-hist', dogCat);
 	  (0, _hist2.default)().xDomain([0, 24]).keys(['dog', 'cat'])('#dogcat-hist', dogCat);
 	  (0, _hist2.default)().xDomain([0, 24]).keys(['dog', 'cat', 'horse'])('#dogcathorse-hist', dogCat);
+	
+	  (0, _hist2.default)().histKey('hist_stroke').xDomain([0, 24]).showAvg(false).keys(['dog', 'cat', 'horse'])('#dogcathorse-strokes', dogCat);
+	
+	  (0, _hist2.default)().histKey('hist_stroke').xDomain([0, 24]).width(260).height(200).showAvg(false).overlap(false).keys(['dog', 'cat', 'horse'])('#dogcathorse-strokes-small', dogCat);
+	
 	  // bird histogram
-	  (0, _hist2.default)().xDomain([0, 20]).width(200).height(200).keys(null).overlap(false)('#birds', birds);
+	  (0, _hist2.default)().histKey('hist').showAvg(true).xDomain([0, 20]).width(200).height(200).keys(null).overlap(false)('#birds', birds);
 	
 	  (0, _hist2.default)().xDomain([0, 20]).width(200).height(200).keys(null).overlap(false)('#bugs', bugs);
+	
 	  (0, _hist2.default)().xDomain([0, 20]).width(200).height(200).keys(null).overlap(false)('#shapes', shapes);
 	}
 	
@@ -17108,7 +17114,9 @@
 	  var xDomain = null;
 	  var histKey = 'hist';
 	  var keys = null;
-	  var graphKeys = [];
+	  // let graphKeys = [];
+	  var showAvg = true;
+	  var showDrawings = true;
 	
 	  var xScale = d3.scaleLinear();
 	  var yScale = d3.scaleLinear();
@@ -17161,8 +17169,8 @@
 	    yScale.range([height, 0]).domain([0, d3.max(yMaxs)]);
 	  }
 	
-	  function setupSvg(selection, mKeys) {
-	    graphKeys = mKeys;
+	  function setupSvg(selection) {
+	    // graphKeys = mKeys
 	    svg = d3.select(selection).append('svg').attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom);
 	
 	    // TODO: g is global - but dangerous.
@@ -17180,6 +17188,10 @@
 	  }
 	
 	  function setupAnnotations(aKeys) {
+	    if (!showAvg) {
+	      return;
+	    }
+	
 	    var means = aKeys.map(function (k) {
 	      return {
 	        mean: +data[k].dt_sec_mean,
@@ -17254,6 +17266,7 @@
 	
 	      if (!overlap) {
 	        g.append('text').attr('x', 0).attr('y', height + margin.bottom / 2).attr('dy', 10).text(id);
+	
 	        setupAnnotations([id]);
 	      }
 	    });
@@ -17318,6 +17331,22 @@
 	      return keys;
 	    }
 	    keys = value;
+	    return this;
+	  };
+	
+	  chart.showAvg = function setShowAvg(value) {
+	    if (!arguments.length) {
+	      return showAvg;
+	    }
+	    showAvg = value;
+	    return this;
+	  };
+	
+	  chart.showDrawings = function setShowDrawings(value) {
+	    if (!arguments.length) {
+	      return showDrawings;
+	    }
+	    showDrawings = value;
 	    return this;
 	  };
 	
