@@ -33,7 +33,7 @@ h1, h2 {
     .figure .annotation p {
       margin-bottom: 1.0rem; }
     .figure .annotation .legend {
-      width: 25%;
+      width: 130px;
       float: right; }
       .figure .annotation .legend p {
         text-align: left; }
@@ -58,18 +58,18 @@ h1, h2 {
   vertical-align: middle; }
 
 .dog {
-  fill: #4CAF50;
-  background-color: #4CAF50;
+  fill: #607D8B;
+  background-color: #607D8B;
   opacity: 0.8; }
 
 .cat {
-  fill: #FF6D00;
-  background-color: #FF6D00;
+  fill: #FF5722;
+  background-color: #FF5722;
   opacity: 0.8; }
 
 .horse {
-  fill: #5D4037;
-  background-color: #5D4037;
+  fill: #795548;
+  background-color: #795548;
   opacity: 0.8; }
 
 .active rect {
@@ -82,11 +82,11 @@ h1, h2 {
 .bird {
   fill: #F48FB1; }
 
-.swan {
-  fill: #F06292; }
+.duck {
+  fill: #E91E63; }
 
 .flamingo {
-  fill: #E91E63; }
+  fill: #F06292; }
 
 .ant {
   fill: #90A4AE; }
