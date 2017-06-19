@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
   <title>How Long Does it Take to Draw a Dog?</title>
-  <meta name="description" content="">
+  <meta name="description" content="A look at drawing time in Google's Quickdraw dataset">
   <meta name="author" content="Jim Vallandingham">
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,16 +26,98 @@
       <div id="dogs-title"></div>
       <div class="text">
         <p>
-          Jump launch to pounce upon little yarn mouse, bare fangs at toy run hide in litter box until treats are fed attack dog, run away and pretend to be victim destroy the blinds.
+          Google has recently released an amazing dataset of <a href="https://quickdraw.withgoogle.com/data" target="_blank">over 50 million drawings</a> of 345 types of things, ranging from triangles to trombones.
+
         </p>
         <p>
-          Hopped up on catnip jump off balcony, onto stranger's head pushes butt to face yet fooled again thinking the dog likes me yet eat grass, throw it back up where is my slave? I'm getting hungry, meow. Lounge in doorway leave fur on owners clothes decide to want nothing to do with my owner today meow.
+          A number of great analyses have already been created, from <a href="" target="_blank">Cultural differences when drawing a circle</a> to <a target="_blank" href="http://colinmorris.github.io/blog/bad_flamingos">Finding bad flamingo drawings</a>.
+        </p>
+        <p>
+          In this short visual exploration, we answer a simple question: how long are people spending on drawing these doodles?
+          Let's start with dogs!
+        </p>
+      </div>
+
+      <div class="figure" style="width:940px; height:480px;">
+        <div class="graph" id="dog-hist"></div>
+        <div id="dog-hist-annotation" class="annotation">
+          <p class="title">Distribution of dog drawing times</p>
+        </div>
+      </div>
+
+      <div class="text">
+
+        <p>
+          The above graph shows the distribution of time spent drawing a dog for the <strong>152,000</strong> dog doodles in the Quickdraw dataset.
+          Only dogs correctly recongized by Google's algorithm as a <i>dog</i> are included.
+          We can see the average amount of time spent drawing a dog was <strong>7.4 seconds</strong>.
         </p>
 
+        <p>
+          The times <strong>exclude pauses between strokes</strong>, which for dog drawings was an average of about <strong>3.4 seconds</strong>.
+        </p>
+        <p>
+          This leads to a second question: is 7.4 seconds a long time to spend doodling an animal? What about cats?
+        </p>
       </div>
-      <div id="hist"></div>
-      <div id="dogs"></div>
-      <div id="cats"></div>
+
+      <h2>Dogs and Cats, Drawn Together</h2>
+
+      <div class="figure" style="width:940px; height:480px;">
+        <div class="graph" id="dogcat-hist"></div>
+        <div class="annotation">
+          <p class="title">Dogs vs cats</p>
+          <div class="legend">
+            <p><span class="box dog"></span> Dog drawings</p>
+            <p><span class="box cat"></span> Cat drawings</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="text">
+        <p>
+          So people draw cats faster than dogs!
+          On average, it takes almost <strong>2 additional seconds</strong> to draw a dog rather than a cat.
+        </p>
+        <p><strong>TODO</strong></p>
+      </div>
+
+      <div class="figure" style="width:940px; height:480px;">
+        <div class="graph" id="dogcathorse-hist"></div>
+        <div class="annotation">
+          <p class="title">Dogs vs cats vs horses</p>
+          <div class="legend">
+            <p><span class="box dog"></span> Dog drawings</p>
+            <p><span class="box cat"></span> Cat drawings</p>
+            <p><span class="box horse"></span> Horse drawings</p>
+          </div>
+        </div>
+      </div>
+
+      <h2>Do Master Works Take More Strokes?</h2>
+
+      <div class="text">
+        <p><strong>TODO</strong></p>
+      </div>
+
+      <h2>Which was Drawn First, the Chicken or the Egg?</h2>
+      <div class="text">
+        <p>
+          Ok, ok, the Quickdraw dataset doesn't <i>really</i> include egg drawings, or even chickens, but I couldn't pass up the catchy title.
+          Now we will start looking at other groups of doodles to see how drawing time impacts drawings.
+        </p>
+
+        <p>
+          First, a flock of <strong>birds</strong>, with circle standing in for the egg.
+      </div>
+      <p class="right title">Bird drawing times</p>
+      <div id="birds"></div>
+
+      <p class="right title">Bug drawing times</p>
+      <div id="bugs"></div>
+
+      <p class="right title">Shape drawing times</p>
+      <div id="shapes"></div>
     </div>
   </div> <!--! end of #container -->
 

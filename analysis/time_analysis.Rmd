@@ -59,6 +59,13 @@ dogs %>% filter(recognized == 'True') %>%
 ```
 
 ```{r}
+dogs %>% filter(recognized == 'True') %>%  filter(drawing_time_draw_seconds < 25) %>%
+  ggplot(aes(x = drawing_time_draw_seconds)) +
+  geom_histogram(binwidth = 1) + 
+  labs(title = "Histogram of Dog Drawing Time")
+```
+
+```{r}
 dogs %>% 
   ggplot(aes(x = drawing_time_draw_seconds, fill = recognized)) +
   geom_histogram(binwidth = 1) + 
@@ -94,6 +101,22 @@ dogs_cats_rec_sum %>%
 cats_rec <- cats %>% filter(recognized == 'True')
 dogs_rec <- dogs %>% filter(recognized == 'True')
 ```
+
+```{r}
+dogs_cats_rec <- rbind(dogs_rec, cats_rec)
+```
+
+```{r}
+dogs_cats_rec %>%
+  ggplot(aes(x = word, y = drawing_time_pause_seconds)) +
+  geom_boxplot()
+```
+
+```{r}
+summary(dogs_rec$drawing_time_pause_seconds)
+summary(cats_rec$drawing_time_pause_seconds)
+```
+
 
 ```{r}
 #dogs_cats <- rbind(cat_drawings_rec, dog_drawings_rec)
@@ -140,12 +163,13 @@ ggplot() +
 ```
 
 ```{r}
-  ggplot() +
+ p<- ggplot() +
   geom_histogram(data = cats_rec, aes(x = drawing_time_draw_seconds, y = (..count..)/sum(..count..)), alpha = 0.6, fill = 'red', binwidth = 1, center = 0, closed = 'left') +
   geom_histogram(data = dogs_rec, aes(x = drawing_time_draw_seconds, y = (..count..)/sum(..count..)), alpha = 0.6, fill = 'blue', binwidth = 1, center = 0, closed = 'left') +
-  scale_x_continuous(limits = c(0, 25)) + 
+  scale_x_continuous(limits = c(0, 25), breaks = c(0,1,2,3,4,5,6,7,8,9,10)) + 
   scale_y_continuous(labels = scales::percent) +
   labs(title = "Distribution of Drawing Seconds Taken for Drawing a cat vs a dog", y = "", x = "Drawing Time (sec)")
+pg <- ggplot_build(p)
 ```
 
 

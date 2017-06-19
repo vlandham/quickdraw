@@ -7,9 +7,10 @@ body {
   .nav p {
     padding-left: 2rem;
     padding-right: 2rem;
-    padding-top: 8px; }
+    padding-top: 8px;
+    color: white; }
 
-h1 {
+h1, h2 {
   text-align: center;
   margin: auto; }
 
@@ -17,13 +18,86 @@ h1 {
   max-width: 60rem;
   margin: 2rem auto; }
 
-.bar rect {
-  opacity: 0.5; }
+.figure {
+  position: relative; }
+  .figure .graph {
+    position: absolute; }
+  .figure .annotation {
+    position: absolute;
+    text-align: right;
+    float: right;
+    z-index: 40;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; }
+    .figure .annotation p {
+      margin-bottom: 1.0rem; }
+    .figure .annotation .legend {
+      width: 20%;
+      float: right; }
+      .figure .annotation .legend p {
+        text-align: left; }
+
+.graph-label {
+  font-size: 10px; }
+
+.title {
+  font-size: 2rem;
+  font-weight: 700; }
+
+.right {
+  text-align: right;
+  margin-bottom: 0rem;
+  clear: both;
+  display: block; }
+
+.box {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  vertical-align: middle; }
 
 .dog {
-  fill: #0091EA; }
+  fill: #4CAF50;
+  background-color: #4CAF50;
+  opacity: 0.8; }
 
 .cat {
-  fill: #C62828; }
+  fill: #FF6D00;
+  background-color: #FF6D00;
+  opacity: 0.8; }
+
+.horse {
+  fill: #5D4037;
+  background-color: #5D4037;
+  opacity: 0.8; }
+
+.active rect {
+  opacity: 1.0;
+  fill: #424242; }
+
+#birds .circle {
+  fill: #F8BBD0; }
+
+.bird {
+  fill: #F48FB1; }
+
+.swan {
+  fill: #F06292; }
+
+.flamingo {
+  fill: #E91E63; }
+
+.ant {
+  fill: #90A4AE; }
+
+.mosquito {
+  fill: #607D8B; }
+
+.butterfly {
+  fill: #455A64; }
+
+.scorpion {
+  fill: #263238; }
 
 /*# sourceMappingURL=app.css.map*/
