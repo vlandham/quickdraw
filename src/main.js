@@ -7,8 +7,6 @@ import '../index.html';
 import './style';
 
 const draw = createDraw();
-// const limitDraw = createDraw().limit(14);
-const hist = createHist();
 
 function pullOutDogs(dogCat) {
   const dogDrawings = d3.keys(dogCat.dog.drawings)
@@ -27,7 +25,8 @@ function display(error, dogCat, birds, bugs, shapes) {
   // console.log(dogCat.dog.dt_sec_quans)
 
   const dogDrawings = pullOutDogs(dogCat);
-  draw.limit(14)('#dogs-title', dogDrawings);
+  draw.limit(14)('#dogs-title');
+  draw.drawings(dogDrawings)
   // console.log(dogDrawings)
 
   // draw.limit(null)('#dogs', dogs);
@@ -75,7 +74,6 @@ function display(error, dogCat, birds, bugs, shapes) {
     .height(200)
     .keys(null)
     .overlap(false)('#shapes', shapes);
-
 }
 
 d3.queue()

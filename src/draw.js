@@ -6,7 +6,9 @@ export default function createDraw() {
   let height = 900;
   const margin = { top: 10, right: 20, bottom: 10, left: 20 };
   let g = null;
+  let svg = null;
   let data = [];
+  let selector = null;
   let limit = null;
   let rowCount = 14;
   let panelWidth = 64;
@@ -17,24 +19,14 @@ export default function createDraw() {
     .y(d => d[1])
     .curve(d3.curveBasis);
 
-  const chart = function wrapper(selection, rawData) {
-    data = rawData;
-    filterData();
-    rowCount = Math.floor(width / panelWidth);
-    // console.log(rowCount);
-    height = (Math.floor(data.length / rowCount)) * panelWidth;
-    if (data.length % rowCount > 0) {
-      height += panelWidth;
-    }
+  const chart = function wrapper(selection) {
+    // data = rawData;
 
 
-    const svg = d3.select(selection).append('svg')
-      .attr('width', width + margin.left + margin.right)
-      .attr('height', height + margin.top + margin.bottom);
+    svg = d3.select(selection).append('svg')
 
     g = svg.append('g')
       .attr('transform', `translate(${margin.left},${margin.top})`);
-    update();
   };
 
   function filterData() {
@@ -44,6 +36,16 @@ export default function createDraw() {
   }
 
   function update() {
+    filterData();
+    rowCount = Math.floor(width / panelWidth);
+    // console.log(rowCount);
+    height = (Math.floor(data.length / rowCount)) * panelWidth;
+    if (data.length % rowCount > 0) {
+      height += panelWidth;
+    }
+    svg
+      .attr('width', width + margin.left + margin.right)
+      .attr('height', height + margin.top + margin.bottom);
     const panels = g.selectAll('.panel')
       .data(data);
     const panelsE = panels.enter()
@@ -87,6 +89,19 @@ export default function createDraw() {
   chart.panelWidth = function setPanelWidth(value) {
     if (!arguments.length) { return panelWidth; }
     panelWidth = value;
+    return this;
+  };
+
+  chart.drawings = function setDrawings(value) {
+    if (!arguments.length) { return data; }
+    data = value;
+    update();
+    return this;
+  };
+
+  chart.selector = function setSelector(value) {
+    if (!arguments.length) { return selector; }
+    selector = value;
     return this;
   };
 

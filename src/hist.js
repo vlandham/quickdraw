@@ -1,5 +1,6 @@
 
 import * as d3 from 'd3';
+import createDraw from './draw';
 
 export default function createHist() {
   const margin = { top: 40, right: 10, bottom: 40, left: 30 };
@@ -19,9 +20,18 @@ export default function createHist() {
 
   const xScale = d3.scaleLinear();
   const yScale = d3.scaleLinear();
+  const draw = createDraw();
 
   const chart = function wrapper(selection, rawData) {
     data = rawData;
+
+    draw('#dog-draw');
+
+    if(data.dog) {
+
+      draw.drawings(data.dog.drawings[3])
+    }
+
 
     if (!keys) {
       keys = data.keys;
