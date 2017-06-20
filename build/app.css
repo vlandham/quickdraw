@@ -3,12 +3,15 @@ body {
 
 .nav {
   height: 40px;
-  background-color: #424242; }
+  background-color: #fff;
+  border-bottom: 2px dashed #757575;
+  margin-bottom: 40px; }
   .nav p {
     padding-left: 2rem;
     padding-right: 2rem;
-    padding-top: 8px;
-    color: white; }
+    padding-top: 8px; }
+  .nav a {
+    color: black; }
 
 h1, h2 {
   text-align: center;
