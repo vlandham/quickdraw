@@ -6,7 +6,7 @@
   "scripts": {
     "start": "webpack-dev-server --progress --colors",
     "watch": "webpack-dev-server --progress --colors",
-    "build": "webpack"
+    "build": "webpack --minimize"
   },
   "repository": {
     "type": "git",
