@@ -107,7 +107,9 @@
 	
 	  (0, _hist2.default)().histKey('hist_stroke').xDomain([0, 24]).width(260).height(200).showAvg(false).overlap(false).showDrawings(true).drawingsKey('drawings_strokes').keys(['dog', 'cat', 'horse'])('#dogcathorse-strokes-small', '#dogcathorse-strokes-draw', dogCat);
 	
-	  d3.queue().defer(d3.json, 'data/bird_flamingo_owl_duck_out.json').defer(d3.json, 'data/ant_mosquito_butterfly_scorpion_out.json').defer(d3.json, 'data/circle_squiggle_triangle_square_out.json').await(displaySmallMults);
+	  setTimeout(function () {
+	    d3.queue().defer(d3.json, 'data/bird_flamingo_owl_duck_out.json').defer(d3.json, 'data/ant_mosquito_butterfly_scorpion_out.json').defer(d3.json, 'data/circle_squiggle_triangle_square_out.json').await(displaySmallMults);
+	  }, 10);
 	}
 	
 	d3.queue().defer(d3.json, 'data/dog_cat_horse_out.json').await(display);
