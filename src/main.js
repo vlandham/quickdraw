@@ -62,9 +62,9 @@ function display(error, dogCat) {
   // draw.limit(null)('#dogs', dogs);
   // draw.limit(14)('#cats', cats);
   // dog-cat histogram
-  createHist().xDomain([0, 24]).keys(['dog'])('#dog-hist', '#dog-draw', dogCat);
-  createHist().xDomain([0, 24]).keys(['dog', 'cat'])('#dogcat-hist', '#dogcat-draw', dogCat);
-  createHist().xDomain([0, 24]).keys(['dog', 'cat', 'horse'])('#dogcathorse-hist', '#dogcathorse-draw', dogCat);
+  createHist().xDomain([0, 20]).keys(['dog'])('#dog-hist', '#dog-draw', dogCat);
+  createHist().xDomain([0, 20]).keys(['dog', 'cat'])('#dogcat-hist', '#dogcat-draw', dogCat);
+  createHist().xDomain([0, 20]).keys(['dog', 'cat', 'horse'])('#dogcathorse-hist', '#dogcathorse-draw', dogCat);
 
   createHist()
     .histKey('hist_stroke')
