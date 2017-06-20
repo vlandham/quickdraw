@@ -13,6 +13,9 @@ body {
   .nav a {
     color: black; }
 
+#main {
+  margin-bottom: 80px; }
+
 h1, h2 {
   text-align: center;
   margin: auto; }
