@@ -26,7 +26,7 @@ export default function createHist() {
     data = rawData;
 
     if (drawSelection) {
-      draw(drawSelection);
+      draw.showTitle(true)(drawSelection);
     }
 
     if (!keys) {

@@ -12,6 +12,7 @@ export default function createDraw() {
   let limit = 14;
   let rowCount = 14;
   let panelWidth = 64;
+  let showTitle = true;
   const titleHeight = 15;
 
 
@@ -35,9 +36,13 @@ export default function createDraw() {
 
   function update() {
     rowCount = limit;
+    let tHeight = titleHeight;
+    if (!showTitle) {
+      tHeight = 0;
+    }
     // console.log(rowCount);
     // height = (Math.floor(data.length / rowCount)) * panelWidth;
-    height = data.length * (panelWidth + titleHeight);
+    height = data.length * (panelWidth + tHeight);
 
     svg
       .attr('width', width + margin.left + margin.right)
@@ -52,15 +57,17 @@ export default function createDraw() {
     const rowsE = rows.enter()
       .append('g')
       .attr('class', 'row')
-      .attr('transform', (d, i) => `translate(${0},${(i * panelWidth) + ((i + 1) * titleHeight)})`);
+      .attr('transform', (d, i) => `translate(${0},${(i * panelWidth) + ((i + 1) * tHeight)})`);
 
     rows = rows.merge(rowsE);
 
-    rows
-      .append('text')
-      .attr('class', 'row-title')
-      .attr('dy', -10)
-      .text(d => `${d.key} drawn in ${d.x}-${+d.x + 1} seconds`);
+    if (showTitle) {
+      rows
+        .append('text')
+        .attr('class', 'row-title')
+        .attr('dy', -10)
+        .text(d => `${d.key} drawn in ${d.x}-${+d.x + 1} seconds`);
+    }
 
     const panels = rows.selectAll('.panel')
       .data(d => d.drawings.slice(0, limit));
@@ -152,6 +159,12 @@ export default function createDraw() {
   chart.selector = function setSelector(value) {
     if (!arguments.length) { return selector; }
     selector = value;
+    return this;
+  };
+
+  chart.showTitle = function setShowTitle(value) {
+    if (!arguments.length) { return showTitle; }
+    showTitle = value;
     return this;
   };
 
