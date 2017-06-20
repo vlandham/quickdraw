@@ -80,13 +80,16 @@ h1, h2 {
   fill: #F8BBD0; }
 
 .bird {
-  fill: #F48FB1; }
-
-.duck {
-  fill: #E91E63; }
+  fill: #F8BBD0; }
 
 .flamingo {
   fill: #F06292; }
+
+.owl {
+  fill: #E91E63; }
+
+.duck {
+  fill: #C2185B; }
 
 .ant {
   fill: #90A4AE; }
@@ -99,5 +102,17 @@ h1, h2 {
 
 .scorpion {
   fill: #263238; }
+
+.circle {
+  fill: #FFCC80; }
+
+.squiggle {
+  fill: #FFA726; }
+
+.triangle {
+  fill: #FB8C00; }
+
+.square {
+  fill: #EF6C00; }
 
 /*# sourceMappingURL=app.css.map*/

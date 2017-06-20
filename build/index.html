@@ -43,8 +43,8 @@
         <div id="dog-hist-annotation" class="annotation">
           <p class="title">Distribution of dog drawing times</p>
           <p>
-            Mouse over bars to see example doodles<br/>
-            drawn in that amount of time below.
+            <i>Mouse over bars to see example doodles<br/>
+            drawn in that amount of time below.</i>
           </p>
         </div>
       </div>
@@ -122,7 +122,11 @@
       <h2>Do Master Works Take More Strokes?</h2>
 
       <div class="text">
-        <p>I was expecting that </p>
+        <p>I was expecting that the doodles that take longer to draw - like horses, would use more strokes. This appears <strong>not</strong> to be the case.</p>
+        <p>
+          Let's look at the distribution of <strong>stroke counts</strong> now instead of drawing times.
+          To see each distribuition more clearly, I split them up into a small multiple below.
+        </p>
       </div>
 
       <div class="figure" style="width:940px; height:480px;">
@@ -136,14 +140,8 @@
           </div>
         </div>
       </div>
-
-      <div class="text">
-        <p>
-          To see each distribuition more clearly, we can split them up into a small multiple.
-        </p>
-      </div>
-
       <div id="dogcathorse-strokes-small"></div>
+      <div id="dogcathorse-strokes-draw"></div>
 
       <div class="text">
         <p>Perhaps surprisingly, the stroke count distributions for these three doodles look quite different from one another.</p>
@@ -187,6 +185,8 @@
       <div class="text">
         <p>
           It is impressive anyone can draw a mosquito, especially in only 5 seconds.
+          It is also impressive just how much work people put into doodling arthropods.
+          Check out those detailed scorpions!
         </p>
       </div>
 
@@ -211,12 +211,15 @@
   <script src="build/app.js"></script>
 
 
-  <!-- <script>  -->
-  <!--   window._gaq = [['_setAccount','UAXXXXXXXX1'],['_trackPageview'],['_trackPageLoadTime']]; -->
-  <!--   Modernizr.load({ -->
-  <!--     load: ('https:' == location.protocol ? '//ssl' : '//www') + '.google&#45;analytics.com/ga.js' -->
-  <!--   }); -->
-  <!-- </script> -->
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
+    ga('create', 'UA-17355070-1', 'auto');
+    ga('send', 'pageview');
+
+  </script>
 </body>
 </html>

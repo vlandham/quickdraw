@@ -1,6 +1,10 @@
 
 import * as d3 from 'd3';
 
+function capitalizeTxt(txt) {
+  return txt.charAt(0).toUpperCase() + txt.slice(1);
+}
+
 export default function createDraw() {
   let width = 900;
   let height = 900;
@@ -13,7 +17,8 @@ export default function createDraw() {
   let rowCount = 14;
   let panelWidth = 64;
   let showTitle = true;
-  const titleHeight = 15;
+  const titleHeight = 30;
+  let showingSecs = true;
 
 
   const line = d3.line()
@@ -22,17 +27,19 @@ export default function createDraw() {
     .curve(d3.curveBasis);
 
   const chart = function wrapper(selection) {
-    svg = d3.select(selection).append('svg');
+    svg = d3.select(selection).select('svg');
+    if (svg.size() === 0) {
+      svg = d3.select(selection).append('svg');
+    }
 
-    g = svg.append('g')
-      .attr('transform', `translate(${margin.left},${margin.top})`);
+    g = svg.select('.root-group');
+
+    if (g.size() === 0) {
+      g = svg.append('g')
+        .attr('class', 'root-group')
+        .attr('transform', `translate(${margin.left},${margin.top})`);
+    }
   };
-
-  function filterData() {
-    // if (limit) {
-    //   data = data.slice(0, limit);
-    // }
-  }
 
   function update() {
     rowCount = limit;
@@ -66,7 +73,7 @@ export default function createDraw() {
         .append('text')
         .attr('class', 'row-title')
         .attr('dy', -10)
-        .text(d => `${d.key} drawn in ${d.x}-${+d.x + 1} seconds`);
+        .text(d => showingSecs ? `${capitalizeTxt(d.key)} drawn in ${d.x}-${+d.x + 1} seconds` : `${capitalizeTxt(d.key)} drawn with ${d.x} stroke${(+d.x === 1) ? '' : 's'}`);
     }
 
     const panels = rows.selectAll('.panel')
@@ -165,6 +172,12 @@ export default function createDraw() {
   chart.showTitle = function setShowTitle(value) {
     if (!arguments.length) { return showTitle; }
     showTitle = value;
+    return this;
+  };
+
+  chart.showingSecs = function setShowingSecs(value) {
+    if (!arguments.length) { return showingSecs; }
+    showingSecs = value;
     return this;
   };
 

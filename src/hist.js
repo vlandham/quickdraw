@@ -13,6 +13,7 @@ export default function createHist() {
   let overlap = true;
   let xDomain = null;
   let histKey = 'hist';
+  let drawingsKey = 'drawings';
   let keys = null;
   // let graphKeys = [];
   let showAvg = true;
@@ -26,7 +27,7 @@ export default function createHist() {
     data = rawData;
 
     if (drawSelection) {
-      draw.showTitle(true)(drawSelection);
+      draw.showTitle(true).showingSecs(drawingsKey === 'drawings')(drawSelection);
     }
 
     if (!keys) {
@@ -161,8 +162,7 @@ export default function createHist() {
         mouseover.bind(that)(d);
         if (showDrawings) {
           // console.log(bKeys)
-          const animalDrawings = bKeys.map(k => ({ key: k, drawings: data[k].drawings[d] || [], x: d }));
-          console.log(animalDrawings)
+          const animalDrawings = bKeys.map(k => ({ key: k, drawings: data[k][drawingsKey][d] || [], x: d }));
           draw.drawings(animalDrawings);
         }
       })
@@ -179,7 +179,7 @@ export default function createHist() {
     keys.forEach((id) => {
       if (!overlap) {
         setupSvg(selection, [id]);
-        setupBackground([id]);
+        setupBackground(keys);
       }
 
       const idG = g.append('g')
@@ -271,6 +271,12 @@ export default function createHist() {
   chart.showDrawings = function setShowDrawings(value) {
     if (!arguments.length) { return showDrawings; }
     showDrawings = value;
+    return this;
+  };
+
+  chart.drawingsKey = function setDrawingsKey(value) {
+    if (!arguments.length) { return drawingsKey; }
+    drawingsKey = value;
     return this;
   };
 

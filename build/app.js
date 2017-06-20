@@ -77,7 +77,16 @@
 	  return [{ key: 'dog', drawings: dogDrawings }];
 	}
 	
-	function display(error, dogCat, birds, bugs, shapes) {
+	function displaySmallMults(error, birds, bugs, shapes) {
+	  // bird histogram
+	  (0, _hist2.default)().histKey('hist').showAvg(true).showDrawings(true).xDomain([0, 20]).width(200).height(200).keys(null).drawingsKey('drawings').overlap(false)('#birds', '#birds-draw', birds);
+	
+	  (0, _hist2.default)().xDomain([0, 20]).showDrawings(true).width(200).height(200).keys(null).overlap(false)('#bugs', '#bugs-draw', bugs);
+	
+	  (0, _hist2.default)().xDomain([0, 20]).showDrawings(true).width(200).height(200).keys(null).overlap(false)('#shapes', '#shapes-draw', shapes);
+	}
+	
+	function display(error, dogCat) {
 	  console.log(error);
 	
 	  // console.log(dogCat.dog.dt_sec_quans)
@@ -94,19 +103,14 @@
 	  (0, _hist2.default)().xDomain([0, 24]).keys(['dog', 'cat'])('#dogcat-hist', '#dogcat-draw', dogCat);
 	  (0, _hist2.default)().xDomain([0, 24]).keys(['dog', 'cat', 'horse'])('#dogcathorse-hist', '#dogcathorse-draw', dogCat);
 	
-	  (0, _hist2.default)().histKey('hist_stroke').xDomain([0, 24]).showAvg(false).showDrawings(false).keys(['dog', 'cat', 'horse'])('#dogcathorse-strokes', null, dogCat);
+	  (0, _hist2.default)().histKey('hist_stroke').xDomain([0, 24]).showAvg(false).showDrawings(true).drawingsKey('drawings_strokes').keys(['dog', 'cat', 'horse'])('#dogcathorse-strokes', '#dogcathorse-strokes-draw', dogCat);
 	
-	  (0, _hist2.default)().histKey('hist_stroke').xDomain([0, 24]).width(260).height(200).showAvg(false).overlap(false).showDrawings(false).keys(['dog', 'cat', 'horse'])('#dogcathorse-strokes-small', null, dogCat);
+	  (0, _hist2.default)().histKey('hist_stroke').xDomain([0, 24]).width(260).height(200).showAvg(false).overlap(false).showDrawings(true).drawingsKey('drawings_strokes').keys(['dog', 'cat', 'horse'])('#dogcathorse-strokes-small', '#dogcathorse-strokes-draw', dogCat);
 	
-	  // bird histogram
-	  (0, _hist2.default)().histKey('hist').showAvg(true).showDrawings(true).xDomain([0, 20]).width(200).height(200).keys(null).overlap(false)('#birds', '#birds-draw', birds);
-	
-	  (0, _hist2.default)().xDomain([0, 20]).showDrawings(true).width(200).height(200).keys(null).overlap(false)('#bugs', '#bugs-draw', bugs);
-	
-	  (0, _hist2.default)().xDomain([0, 20]).showDrawings(true).width(200).height(200).keys(null).overlap(false)('#shapes', '#shapes-draw', shapes);
+	  d3.queue().defer(d3.json, 'data/bird_flamingo_owl_duck_out.json').defer(d3.json, 'data/ant_mosquito_butterfly_scorpion_out.json').defer(d3.json, 'data/circle_squiggle_triangle_square_out.json').await(displaySmallMults);
 	}
 	
-	d3.queue().defer(d3.json, 'data/dog_cat_horse_out.json').defer(d3.json, 'data/circle_bird_flamingo_duck_out.json').defer(d3.json, 'data/ant_mosquito_butterfly_scorpion_out.json').defer(d3.json, 'data/circle_triangle_square_squiggle_out.json').await(display);
+	d3.queue().defer(d3.json, 'data/dog_cat_horse_out.json').await(display);
 
 /***/ }),
 /* 1 */
@@ -16997,6 +17001,10 @@
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
+	function capitalizeTxt(txt) {
+	  return txt.charAt(0).toUpperCase() + txt.slice(1);
+	}
+	
 	function createDraw() {
 	  var width = 900;
 	  var height = 900;
@@ -17009,7 +17017,8 @@
 	  var rowCount = 14;
 	  var panelWidth = 64;
 	  var showTitle = true;
-	  var titleHeight = 15;
+	  var titleHeight = 30;
+	  var showingSecs = true;
 	
 	  var line = d3.line().x(function (d) {
 	    return d[0];
@@ -17018,16 +17027,17 @@
 	  }).curve(d3.curveBasis);
 	
 	  var chart = function wrapper(selection) {
-	    svg = d3.select(selection).append('svg');
+	    svg = d3.select(selection).select('svg');
+	    if (svg.size() === 0) {
+	      svg = d3.select(selection).append('svg');
+	    }
 	
-	    g = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+	    g = svg.select('.root-group');
+	
+	    if (g.size() === 0) {
+	      g = svg.append('g').attr('class', 'root-group').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+	    }
 	  };
-	
-	  function filterData() {
-	    // if (limit) {
-	    //   data = data.slice(0, limit);
-	    // }
-	  }
 	
 	  function update() {
 	    rowCount = limit;
@@ -17054,7 +17064,7 @@
 	
 	    if (showTitle) {
 	      rows.append('text').attr('class', 'row-title').attr('dy', -10).text(function (d) {
-	        return d.key + ' drawn in ' + d.x + '-' + (+d.x + 1) + ' seconds';
+	        return showingSecs ? capitalizeTxt(d.key) + ' drawn in ' + d.x + '-' + (+d.x + 1) + ' seconds' : capitalizeTxt(d.key) + ' drawn with ' + d.x + ' stroke' + (+d.x === 1 ? '' : 's');
 	      });
 	    }
 	
@@ -17163,6 +17173,14 @@
 	    return this;
 	  };
 	
+	  chart.showingSecs = function setShowingSecs(value) {
+	    if (!arguments.length) {
+	      return showingSecs;
+	    }
+	    showingSecs = value;
+	    return this;
+	  };
+	
 	  return chart;
 	}
 
@@ -17200,6 +17218,7 @@
 	  var overlap = true;
 	  var xDomain = null;
 	  var histKey = 'hist';
+	  var drawingsKey = 'drawings';
 	  var keys = null;
 	  // let graphKeys = [];
 	  var showAvg = true;
@@ -17213,7 +17232,7 @@
 	    data = rawData;
 	
 	    if (drawSelection) {
-	      draw.showTitle(true)(drawSelection);
+	      draw.showTitle(true).showingSecs(drawingsKey === 'drawings')(drawSelection);
 	    }
 	
 	    if (!keys) {
@@ -17329,9 +17348,8 @@
 	      if (showDrawings) {
 	        // console.log(bKeys)
 	        var animalDrawings = bKeys.map(function (k) {
-	          return { key: k, drawings: data[k].drawings[d] || [], x: d };
+	          return { key: k, drawings: data[k][drawingsKey][d] || [], x: d };
 	        });
-	        console.log(animalDrawings);
 	        draw.drawings(animalDrawings);
 	      }
 	    }).on('mouseout', mouseout.bind(this));
@@ -17347,7 +17365,7 @@
 	    keys.forEach(function (id) {
 	      if (!overlap) {
 	        setupSvg(selection, [id]);
-	        setupBackground([id]);
+	        setupBackground(keys);
 	      }
 	
 	      var idG = g.append('g').classed(id, true);
@@ -17449,6 +17467,14 @@
 	      return showDrawings;
 	    }
 	    showDrawings = value;
+	    return this;
+	  };
+	
+	  chart.drawingsKey = function setDrawingsKey(value) {
+	    if (!arguments.length) {
+	      return drawingsKey;
+	    }
+	    drawingsKey = value;
 	    return this;
 	  };
 	

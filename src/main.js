@@ -18,7 +18,38 @@ function pullOutDogs(dogCat) {
   return [{ key: 'dog', drawings: dogDrawings }];
 }
 
-function display(error, dogCat, birds, bugs, shapes) {
+
+function displaySmallMults(error, birds, bugs, shapes) {
+  // bird histogram
+  createHist()
+    .histKey('hist')
+    .showAvg(true)
+    .showDrawings(true)
+    .xDomain([0, 20])
+    .width(200)
+    .height(200)
+    .keys(null)
+    .drawingsKey('drawings')
+    .overlap(false)('#birds', '#birds-draw', birds);
+
+  createHist()
+    .xDomain([0, 20])
+    .showDrawings(true)
+    .width(200)
+    .height(200)
+    .keys(null)
+    .overlap(false)('#bugs', '#bugs-draw', bugs);
+
+  createHist()
+    .xDomain([0, 20])
+    .showDrawings(true)
+    .width(200)
+    .height(200)
+    .keys(null)
+    .overlap(false)('#shapes', '#shapes-draw', shapes);
+}
+
+function display(error, dogCat) {
   console.log(error);
 
   // console.log(dogCat.dog.dt_sec_quans)
@@ -39,8 +70,9 @@ function display(error, dogCat, birds, bugs, shapes) {
     .histKey('hist_stroke')
     .xDomain([0, 24])
     .showAvg(false)
-    .showDrawings(false)
-    .keys(['dog', 'cat', 'horse'])('#dogcathorse-strokes', null, dogCat);
+    .showDrawings(true)
+    .drawingsKey('drawings_strokes')
+    .keys(['dog', 'cat', 'horse'])('#dogcathorse-strokes', '#dogcathorse-strokes-draw', dogCat);
 
   createHist()
     .histKey('hist_stroke')
@@ -49,40 +81,18 @@ function display(error, dogCat, birds, bugs, shapes) {
     .height(200)
     .showAvg(false)
     .overlap(false)
-    .showDrawings(false)
-    .keys(['dog', 'cat', 'horse'])('#dogcathorse-strokes-small', null, dogCat);
-
-  // bird histogram
-  createHist()
-    .histKey('hist')
-    .showAvg(true)
     .showDrawings(true)
-    .xDomain([0, 20])
-    .width(200)
-    .height(200)
-    .keys(null)
-    .overlap(false)('#birds', '#birds-draw', birds);
+    .drawingsKey('drawings_strokes')
+    .keys(['dog', 'cat', 'horse'])('#dogcathorse-strokes-small', '#dogcathorse-strokes-draw', dogCat);
 
-  createHist()
-    .xDomain([0, 20])
-    .showDrawings(true)
-    .width(200)
-    .height(200)
-    .keys(null)
-    .overlap(false)('#bugs', '#bugs-draw', bugs);
 
-  createHist()
-    .xDomain([0, 20])
-    .showDrawings(true)
-    .width(200)
-    .height(200)
-    .keys(null)
-    .overlap(false)('#shapes', '#shapes-draw', shapes);
+  d3.queue()
+    .defer(d3.json, 'data/bird_flamingo_owl_duck_out.json')
+    .defer(d3.json, 'data/ant_mosquito_butterfly_scorpion_out.json')
+    .defer(d3.json, 'data/circle_squiggle_triangle_square_out.json')
+    .await(displaySmallMults);
 }
 
 d3.queue()
   .defer(d3.json, 'data/dog_cat_horse_out.json')
-  .defer(d3.json, 'data/circle_bird_flamingo_duck_out.json')
-  .defer(d3.json, 'data/ant_mosquito_butterfly_scorpion_out.json')
-  .defer(d3.json, 'data/circle_triangle_square_squiggle_out.json')
   .await(display);
