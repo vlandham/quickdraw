@@ -22,16 +22,12 @@ export default function createHist() {
   const yScale = d3.scaleLinear();
   const draw = createDraw();
 
-  const chart = function wrapper(selection, rawData) {
+  const chart = function wrapper(selection, drawSelection, rawData) {
     data = rawData;
 
-    draw('#dog-draw');
-
-    if(data.dog) {
-
-      draw.drawings(data.dog.drawings[3])
+    if (drawSelection) {
+      draw(drawSelection);
     }
-
 
     if (!keys) {
       keys = data.keys;
@@ -149,7 +145,7 @@ export default function createHist() {
     // draw background bars
     const x0s = d3.set(barData, d => d.x0);
 
-    // const that = this;
+    const that = this;
 
     g.selectAll('.background')
       .data(x0s.values())
@@ -161,7 +157,15 @@ export default function createHist() {
       .attr('y', 0)
       .attr('width', d => xScale(+d + 1) - xScale(+d))
       .attr('height', height)
-      .on('mouseover', mouseover.bind(this))
+      .on('mouseover', (d) => {
+        mouseover.bind(that)(d);
+        if (showDrawings) {
+          // console.log(bKeys)
+          const animalDrawings = bKeys.map(k => ({ key: k, drawings: data[k].drawings[d] || [], x: d }));
+          console.log(animalDrawings)
+          draw.drawings(animalDrawings);
+        }
+      })
       .on('mouseout', mouseout.bind(this));
   }
 

@@ -9,9 +9,10 @@ export default function createDraw() {
   let svg = null;
   let data = [];
   let selector = null;
-  let limit = null;
+  let limit = 14;
   let rowCount = 14;
   let panelWidth = 64;
+  const titleHeight = 15;
 
 
   const line = d3.line()
@@ -20,34 +21,50 @@ export default function createDraw() {
     .curve(d3.curveBasis);
 
   const chart = function wrapper(selection) {
-    // data = rawData;
-
-
-    svg = d3.select(selection).append('svg')
+    svg = d3.select(selection).append('svg');
 
     g = svg.append('g')
       .attr('transform', `translate(${margin.left},${margin.top})`);
   };
 
   function filterData() {
-    if (limit) {
-      data = data.slice(0, limit);
-    }
+    // if (limit) {
+    //   data = data.slice(0, limit);
+    // }
   }
 
   function update() {
-    filterData();
-    rowCount = Math.floor(width / panelWidth);
+    rowCount = limit;
     // console.log(rowCount);
-    height = (Math.floor(data.length / rowCount)) * panelWidth;
-    if (data.length % rowCount > 0) {
-      height += panelWidth;
-    }
+    // height = (Math.floor(data.length / rowCount)) * panelWidth;
+    height = data.length * (panelWidth + titleHeight);
+
     svg
       .attr('width', width + margin.left + margin.right)
       .attr('height', height + margin.top + margin.bottom);
-    const panels = g.selectAll('.panel')
+
+    let rows = g.selectAll('.row')
       .data(data);
+
+    rows.selectAll('.panel').remove();
+    rows.selectAll('.row-title').remove();
+
+    const rowsE = rows.enter()
+      .append('g')
+      .attr('class', 'row')
+      .attr('transform', (d, i) => `translate(${0},${(i * panelWidth) + ((i + 1) * titleHeight)})`);
+
+    rows = rows.merge(rowsE);
+
+    rows
+      .append('text')
+      .attr('class', 'row-title')
+      .attr('dy', -10)
+      .text(d => `${d.key} drawn in ${d.x}-${+d.x + 1} seconds`);
+
+    const panels = rows.selectAll('.panel')
+      .data(d => d.drawings.slice(0, limit));
+
     const panelsE = panels.enter()
       .append('g')
       .attr('class', 'panel')
@@ -67,6 +84,39 @@ export default function createDraw() {
       .style('stroke-width', '2')
       .attr('d', line);
   }
+
+  // function update() {
+  //   filterData();
+  //   rowCount = Math.floor(width / panelWidth);
+  //   // console.log(rowCount);
+  //   height = (Math.floor(data.length / rowCount)) * panelWidth;
+  //   if (data.length % rowCount > 0) {
+  //     height += panelWidth;
+  //   }
+  //   svg
+  //     .attr('width', width + margin.left + margin.right)
+  //     .attr('height', height + margin.top + margin.bottom);
+  //   const panels = g.selectAll('.panel')
+  //     .data(data);
+  //   const panelsE = panels.enter()
+  //     .append('g')
+  //     .attr('class', 'panel')
+  //     .attr('transform', (d, i) => {
+  //       const x = (i % rowCount) * panelWidth;
+  //       const y = Math.floor(i / rowCount) * panelWidth;
+  //       return `translate(${(x)},${y}) scale(0.25)`;
+  //     });
+  //
+  //   panelsE.selectAll('.stroke')
+  //     .data(d => d.drawing)
+  //     .enter()
+  //     .append('path')
+  //     .classed('stroke', true)
+  //     .style('fill', 'none')
+  //     .style('stroke', '#111')
+  //     .style('stroke-width', '2')
+  //     .attr('d', line);
+  // }
 
   chart.limit = function setLimit(value) {
     if (!arguments.length) { return limit; }

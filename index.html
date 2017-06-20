@@ -42,6 +42,10 @@
         <div class="graph" id="dog-hist"></div>
         <div id="dog-hist-annotation" class="annotation">
           <p class="title">Distribution of dog drawing times</p>
+          <p>
+            Mouse over bars to see example doodles<br/>
+            drawn in that amount of time below.
+          </p>
         </div>
       </div>
 
@@ -52,11 +56,14 @@
         <p>
           The above graph shows the distribution of time spent drawing a dog for the <strong>152,000</strong> dog doodles in the Quickdraw dataset.
           Only dogs correctly recongized by Google's algorithm as a <i>dog</i> are included.
-          We can see the average amount of time spent drawing a dog was <strong>7.4 seconds</strong>.
         </p>
 
         <p>
-          The times <strong>exclude pauses between strokes</strong>, which for dog drawings was an average of about <strong>3.4 seconds</strong>.
+          Browse through the examples to see what a 2 second dog looks like compared to a 10 second one.
+        </p>
+
+        <p>
+          We can see the average amount of time spent drawing a dog was <strong>7.4 seconds</strong>. The times <strong>exclude pauses between strokes</strong>, which for dog drawings was an average of about <strong>3.4 seconds</strong>.
         </p>
         <p>
           This leads to a second question: is 7.4 seconds a long time to spend doodling an animal? What about cats?
@@ -76,12 +83,20 @@
         </div>
       </div>
 
+      <div class="draw-dock" id="dogcat-draw"></div>
+
       <div class="text">
         <p>
-          Interesting, so people draw cats <strong>faster</strong> than dogs!
+          Interesting, so people draw cats faster than dogs!
           On average, it takes almost <strong>2 additional seconds</strong> to draw a dog rather than a cat.
         </p>
-        <p><strong>TODO</strong></p>
+        <p>
+          Could this be because people often draw just a cat head when drawing a cat, but are more likely to draw an entire dog when drawing a dog?
+        </p>
+
+        <p>
+          What if we add one more mammal into the mix, one we (or at least I) would only recognize a full-body drawing of: <strong>horses</strong>.
+        </p>
       </div>
 
       <div class="figure" style="width:940px; height:480px;">
@@ -96,10 +111,18 @@
         </div>
       </div>
 
+      <div class="draw-dock" id="dogcathorse-draw"></div>
+
+      <div class="text">
+        <p>
+          The average time for doodling horses is <strong>over 9 seconds</strong>!
+        </p>
+      </div>
+
       <h2>Do Master Works Take More Strokes?</h2>
 
       <div class="text">
-        <p><strong>TODO</strong></p>
+        <p>I was expecting that </p>
       </div>
 
       <div class="figure" style="width:940px; height:480px;">
@@ -114,17 +137,32 @@
         </div>
       </div>
 
+      <div class="text">
+        <p>
+          To see each distribuition more clearly, we can split them up into a small multiple.
+        </p>
+      </div>
+
       <div id="dogcathorse-strokes-small"></div>
 
       <div class="text">
-        <p><strong>TODO</strong></p>
+        <p>Perhaps surprisingly, the stroke count distributions for these three doodles look quite different from one another.</p>
+        <p>
+          For dogs, we see a much higher proportion of drawings that use just 1 or 2 strokes. Cat drawings are much more normally distributed, and nobody used just one stroke. This makes sense as we always draw cat whiskers.
+        </p>
+        <p>
+          Horse stroke count follows a completely different pattern. Over <strong>12%</strong> of the horse doodles were drawn without lifting the pen (or mouse, in this case). There are some impressive horse doodlers out there!
+        </p>
       </div>
 
       <h2>Which was Drawn First, the Chicken or the Egg?</h2>
       <div class="text">
         <p>
           Ok, ok, the Quickdraw dataset doesn't <i>really</i> include egg drawings, or even chickens, but I couldn't pass up the catchy title.
-          Now we will start looking at other groups of doodles to see how drawing time impacts drawings.
+        </p>
+
+        <p>
+          We will end this brief analysis by looking at the drawing times of other groups of doodles.
         </p>
 
         <p>
@@ -132,12 +170,41 @@
       </div>
       <p class="right title">Bird drawing times</p>
       <div id="birds"></div>
+      <div class="draw-dock" id="birds-draw"></div>
+      <div class="text">
+        <p>
+          I was surprised that ducks take longer to draw (on average) than flamingos.
+        </p>
+        <p>
+          Also, be sure to check out the <strong>1 second birds</strong> which are all the classic <i>curly V</i> of a bird in the distance. There's more than one way to draw a bird!
+        </p>
+      </div>
 
       <p class="right title">Bug drawing times</p>
       <div id="bugs"></div>
+      <div class="draw-dock" id="bugs-draw"></div>
+
+      <div class="text">
+        <p>
+          It is impressive anyone can draw a mosquito, especially in only 5 seconds.
+        </p>
+      </div>
 
       <p class="right title">Shape drawing times</p>
       <div id="shapes"></div>
+      <div class="draw-dock" id="shapes-draw"></div>
+
+      <h2>The End</h2>
+
+      <div class="text">
+        <p>
+          That's it for now.
+        </p>
+        <p>
+          Hopefully this little look at draw times inspires more exploration of this great data set.
+          Thanks to <a href="http://clome.info/">Yannick Assogba</a> for his inspiring <a href="http://clome.info/work/quickdraw/explore/">Quickdraw PCA exploration</a> and Ian Johnson for his <a href="https://bl.ocks.org/enjalot/a2b28f0ed18b891f9fb70910f1b8886d">sample code</a> and work in releasing this dataset.
+        </p>
+      </div>
     </div>
   </div> <!--! end of #container -->
 

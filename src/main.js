@@ -15,8 +15,7 @@ function pullOutDogs(dogCat) {
       dr.time = key;
       return dr;
     });
-
-  return dogDrawings;
+  return [{ key: 'dog', drawings: dogDrawings }];
 }
 
 function display(error, dogCat, birds, bugs, shapes) {
@@ -26,21 +25,22 @@ function display(error, dogCat, birds, bugs, shapes) {
 
   const dogDrawings = pullOutDogs(dogCat);
   draw.limit(14)('#dogs-title');
-  draw.drawings(dogDrawings)
+  draw.drawings(dogDrawings);
   // console.log(dogDrawings)
 
   // draw.limit(null)('#dogs', dogs);
   // draw.limit(14)('#cats', cats);
   // dog-cat histogram
-  createHist().xDomain([0, 24]).keys(['dog'])('#dog-hist', dogCat);
-  createHist().xDomain([0, 24]).keys(['dog', 'cat'])('#dogcat-hist', dogCat);
-  createHist().xDomain([0, 24]).keys(['dog', 'cat', 'horse'])('#dogcathorse-hist', dogCat);
+  createHist().xDomain([0, 24]).keys(['dog'])('#dog-hist', '#dog-draw', dogCat);
+  createHist().xDomain([0, 24]).keys(['dog', 'cat'])('#dogcat-hist', '#dogcat-draw', dogCat);
+  createHist().xDomain([0, 24]).keys(['dog', 'cat', 'horse'])('#dogcathorse-hist', '#dogcathorse-draw', dogCat);
 
   createHist()
     .histKey('hist_stroke')
     .xDomain([0, 24])
     .showAvg(false)
-    .keys(['dog', 'cat', 'horse'])('#dogcathorse-strokes', dogCat);
+    .showDrawings(false)
+    .keys(['dog', 'cat', 'horse'])('#dogcathorse-strokes', null, dogCat);
 
   createHist()
     .histKey('hist_stroke')
@@ -49,31 +49,35 @@ function display(error, dogCat, birds, bugs, shapes) {
     .height(200)
     .showAvg(false)
     .overlap(false)
-    .keys(['dog', 'cat', 'horse'])('#dogcathorse-strokes-small', dogCat);
+    .showDrawings(false)
+    .keys(['dog', 'cat', 'horse'])('#dogcathorse-strokes-small', null, dogCat);
 
   // bird histogram
   createHist()
     .histKey('hist')
     .showAvg(true)
+    .showDrawings(true)
     .xDomain([0, 20])
     .width(200)
     .height(200)
     .keys(null)
-    .overlap(false)('#birds', birds);
+    .overlap(false)('#birds', '#birds-draw', birds);
 
   createHist()
     .xDomain([0, 20])
+    .showDrawings(true)
     .width(200)
     .height(200)
     .keys(null)
-    .overlap(false)('#bugs', bugs);
+    .overlap(false)('#bugs', '#bugs-draw', bugs);
 
   createHist()
     .xDomain([0, 20])
+    .showDrawings(true)
     .width(200)
     .height(200)
     .keys(null)
-    .overlap(false)('#shapes', shapes);
+    .overlap(false)('#shapes', '#shapes-draw', shapes);
 }
 
 d3.queue()
