@@ -1,50 +1,31 @@
-# An increasingly complicated way to get started with data visualizations using D3
+# Quick Draw visualizations and analysis
 
-Originally this repo used coffeescript and no build systems.
+## About
 
-Now it uses webpack and es6 via Babel to generate the project. This might be overkill.
+Source code powering [http://vallandingham.me/quickdraw/](http://vallandingham.me/quickdraw/).
 
-## Usage
+## Running
 
-### First Clone the Repository
-
-```
-git clone git@github.com:vlandham/vis.git
-cd vis
-```
-
-### You might consider creating a new branch for your Vis
-
-```
-git checkout -b interesting_new_bar_chart
-```
-
-### Install requirements
-
-use `npm` to get things installed
+To setup locally:
 
 ```
 npm install
+npm run start
 ```
 
-### Build and Serve
-
-Use `webpack` to get things built
+To build:
 
 ```
-webpack
+npm run build
 ```
 
-You can also use `npm run` to run `webpack` commands:
+**Note:**
 
-`npm run watch`
+My Google Analytics code is in `index.html`. Please remove if you are planning on forking this. 
 
-`npm run build`
 
-Now visit http://localhost:8080 and open the console to see some output.
+## Analysis
 
-### Start Coding
+Analysis is in `analysis/` sub-directory
 
-The main vis code is in `src/vis.js` and the data loading is in `src/main.js`.
-
-I am using the webpack babel loader so you can use es6 syntax as you like!
+I used `extract_times.ipynb` to prepare the data. `time_analysis.Rmd` to look at the data. And `bin_data.ipynb` to package the data up for display. 
