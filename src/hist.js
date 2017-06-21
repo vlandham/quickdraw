@@ -27,7 +27,7 @@ export default function createHist() {
     data = rawData;
 
     if (drawSelection) {
-      draw.showTitle(true).showingSecs(drawingsKey === 'drawings')(drawSelection);
+      draw.showTitle(true).animate(false).showingSecs(drawingsKey === 'drawings')(drawSelection);
     }
 
     if (!keys) {
@@ -166,7 +166,10 @@ export default function createHist() {
           draw.drawings(animalDrawings);
         }
       })
-      .on('mouseout', mouseout.bind(this));
+      .on('mouseout', mouseout.bind(this))
+      .on('click', (d) => {
+        draw.reanimate();
+      });
   }
 
   function update(selection) {

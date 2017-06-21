@@ -55,7 +55,7 @@ function display(error, dogCat) {
   // console.log(dogCat.dog.dt_sec_quans)
 
   const dogDrawings = pullOutDogs(dogCat);
-  draw.limit(14).showTitle(false)('#dogs-title');
+  draw.limit(14).showTitle(false).animate(true)('#dogs-title');
   draw.drawings(dogDrawings);
   // console.log(dogDrawings)
 

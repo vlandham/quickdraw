@@ -19,6 +19,7 @@ export default function createDraw() {
   let showTitle = true;
   const titleHeight = 30;
   let showingSecs = true;
+  let animate = false;
 
 
   const line = d3.line()
@@ -29,7 +30,8 @@ export default function createDraw() {
   const chart = function wrapper(selection) {
     svg = d3.select(selection).select('svg');
     if (svg.size() === 0) {
-      svg = d3.select(selection).append('svg');
+      svg = d3.select(selection).append('svg')
+        .attr('height', 100);
     }
 
     g = svg.select('.root-group');
@@ -88,7 +90,7 @@ export default function createDraw() {
         return `translate(${(x)},${y}) scale(0.25)`;
       });
 
-    panelsE.selectAll('.stroke')
+    const paths = panelsE.selectAll('.stroke')
       .data(d => d.drawing)
       .enter()
       .append('path')
@@ -97,6 +99,34 @@ export default function createDraw() {
       .style('stroke', '#111')
       .style('stroke-width', '2')
       .attr('d', line);
+
+    if (animate) {
+      paths
+        .each(function (d, i, j) { d.totalLength = this.getTotalLength(); d.pathCount = j.length; })
+        .attr('stroke-dasharray', d => d.totalLength + ' ' + d.totalLength)
+        .attr('stroke-dashoffset', d => d.totalLength)
+        .transition()
+          .duration(800)
+          .delay((d, i) => (d.pathCount - (i)) * 800)
+          .ease(d3.easeLinear)
+          .attr('stroke-dashoffset', 0);
+    }
+  }
+
+  function reanimate() {
+    svg.selectAll('.panel').selectAll('.stroke')
+    .each(function (d, i, j) { d.totalLength = this.getTotalLength(); d.pathCount = j.length; })
+    .attr('stroke-dasharray', d => d.totalLength + ' ' + d.totalLength)
+    .attr('stroke-dashoffset', d => d.totalLength)
+    .transition()
+      .duration(400)
+      .delay((d, i) => (d.pathCount - (i + 1)) * 400)
+      .ease(d3.easeLinear)
+      .attr('stroke-dashoffset', 0);
+  }
+
+  chart.reanimate = function setReanimate() {
+    reanimate();
   }
 
   // function update() {
@@ -178,6 +208,11 @@ export default function createDraw() {
   chart.showingSecs = function setShowingSecs(value) {
     if (!arguments.length) { return showingSecs; }
     showingSecs = value;
+    return this;
+  };
+  chart.animate = function setAnimate(value) {
+    if (!arguments.length) { return animate; }
+    animate = value;
     return this;
   };
 
