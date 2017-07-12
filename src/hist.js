@@ -167,7 +167,7 @@ export default function createHist() {
         }
       })
       .on('mouseout', mouseout.bind(this))
-      .on('click', (d) => {
+      .on('click', () => {
         draw.reanimate();
       });
   }

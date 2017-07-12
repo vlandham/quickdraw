@@ -49,8 +49,7 @@ export default function createDraw() {
     if (!showTitle) {
       tHeight = 0;
     }
-    // console.log(rowCount);
-    // height = (Math.floor(data.length / rowCount)) * panelWidth;
+
     height = data.length * (panelWidth + tHeight);
 
     svg
@@ -102,8 +101,10 @@ export default function createDraw() {
 
     if (animate) {
       paths
-        .each(function (d, i, j) { d.totalLength = this.getTotalLength(); d.pathCount = j.length; })
-        .attr('stroke-dasharray', d => d.totalLength + ' ' + d.totalLength)
+        .each(function (d, i, j) {
+          d.totalLength = this.getTotalLength();
+          d.pathCount = j.length;
+        }).attr('stroke-dasharray', d => d.totalLength + ' ' + d.totalLength)
         .attr('stroke-dashoffset', d => d.totalLength)
         .transition()
           .duration(800)
@@ -115,8 +116,10 @@ export default function createDraw() {
 
   function reanimate() {
     svg.selectAll('.panel').selectAll('.stroke')
-    .each(function (d, i, j) { d.totalLength = this.getTotalLength(); d.pathCount = j.length; })
-    .attr('stroke-dasharray', d => d.totalLength + ' ' + d.totalLength)
+    .each(function (d, i, j) {
+      d.totalLength = this.getTotalLength();
+      d.pathCount = j.length;
+    }).attr('stroke-dasharray', d => d.totalLength + ' ' + d.totalLength)
     .attr('stroke-dashoffset', d => d.totalLength)
     .transition()
       .duration(400)
@@ -128,39 +131,6 @@ export default function createDraw() {
   chart.reanimate = function setReanimate() {
     reanimate();
   }
-
-  // function update() {
-  //   filterData();
-  //   rowCount = Math.floor(width / panelWidth);
-  //   // console.log(rowCount);
-  //   height = (Math.floor(data.length / rowCount)) * panelWidth;
-  //   if (data.length % rowCount > 0) {
-  //     height += panelWidth;
-  //   }
-  //   svg
-  //     .attr('width', width + margin.left + margin.right)
-  //     .attr('height', height + margin.top + margin.bottom);
-  //   const panels = g.selectAll('.panel')
-  //     .data(data);
-  //   const panelsE = panels.enter()
-  //     .append('g')
-  //     .attr('class', 'panel')
-  //     .attr('transform', (d, i) => {
-  //       const x = (i % rowCount) * panelWidth;
-  //       const y = Math.floor(i / rowCount) * panelWidth;
-  //       return `translate(${(x)},${y}) scale(0.25)`;
-  //     });
-  //
-  //   panelsE.selectAll('.stroke')
-  //     .data(d => d.drawing)
-  //     .enter()
-  //     .append('path')
-  //     .classed('stroke', true)
-  //     .style('fill', 'none')
-  //     .style('stroke', '#111')
-  //     .style('stroke-width', '2')
-  //     .attr('d', line);
-  // }
 
   chart.limit = function setLimit(value) {
     if (!arguments.length) { return limit; }

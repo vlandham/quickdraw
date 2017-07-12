@@ -52,15 +52,10 @@ function displaySmallMults(error, birds, bugs, shapes) {
 function display(error, dogCat) {
   console.log(error);
 
-  // console.log(dogCat.dog.dt_sec_quans)
-
   const dogDrawings = pullOutDogs(dogCat);
   draw.limit(14).showTitle(false).animate(true)('#dogs-title');
   draw.drawings(dogDrawings);
-  // console.log(dogDrawings)
 
-  // draw.limit(null)('#dogs', dogs);
-  // draw.limit(14)('#cats', cats);
   // dog-cat histogram
   createHist().xDomain([0, 20]).keys(['dog'])('#dog-hist', '#dog-draw', dogCat);
   createHist().xDomain([0, 20]).keys(['dog', 'cat'])('#dogcat-hist', '#dogcat-draw', dogCat);
