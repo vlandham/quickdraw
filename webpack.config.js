@@ -36,7 +36,6 @@ module.exports = {
         include: /src/,
         loaders: ['babel-loader']
       },
-      { test: /\.css$/, loader: 'style-loader!css-loader' },
       {
         test: /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
         exclude: /(node_modules|bower_components)/,
@@ -48,8 +47,12 @@ module.exports = {
         loader: "file?name=build/[name].[ext]"
       },
       {
+        test: /\.css$/,
+        loader: ExtractTextPlugin.extract("style", "css")
+      },
+      {
         test: /\.scss$/,
-        loader: ExtractTextPlugin.extract("style","css!sass")
+        loader: ExtractTextPlugin.extract("style", "css!sass")
       }
     ]
   },
