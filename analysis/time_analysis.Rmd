@@ -19,14 +19,6 @@ cats_org <- read_csv(filename)
 
 ## Clean Data
 
-```{r}
-cats_org %>% filter(stroke_in_order > 0) %>% count()
-cats_org %>% filter(drawing_time_min > 0) %>% count()
-cats_org %>% filter(drawing_time_min > 0) 
-cats_org %>% filter(drawing_time_draw <= 100)
-max(dogs$drawing_time_min)
-```
-
 
 
 ```{r}
@@ -61,8 +53,21 @@ dogs %>% filter(recognized == 'True') %>%
 ```{r}
 dogs %>% filter(recognized == 'True') %>%  filter(drawing_time_draw_seconds < 25) %>%
   ggplot(aes(x = drawing_time_draw_seconds)) +
-  geom_histogram(binwidth = 1) + 
+  geom_histogram(binwidth = 1, fill = "#607d8b") +
+  theme_light() +
   labs(title = "Histogram of Dog Drawing Time")
+```
+
+
+```{r}
+dogs %>% filter(recognized == 'True') %>%  filter(drawing_time_draw_seconds < 25) %>%
+  ggplot(aes(x = drawing_time_draw_seconds, y = (..count..)/sum(..count..))) +
+  geom_histogram(binwidth = 5, fill = "#607d8b") +
+  theme_light() +
+  scale_y_continuous(labels = scales::percent) +
+  scale_x_continuous(limits = c(0,20)) +
+  labs(title = "", y = "", x = "")
+#ggsave('dog_10.png', width = 7, height = 4)
 ```
 
 ```{r}
@@ -170,6 +175,7 @@ ggplot() +
   scale_y_continuous(labels = scales::percent) +
   labs(title = "Distribution of Drawing Seconds Taken for Drawing a cat vs a dog", y = "", x = "Drawing Time (sec)")
 pg <- ggplot_build(p)
+pg
 ```
 
 
