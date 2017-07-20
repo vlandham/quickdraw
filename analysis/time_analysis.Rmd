@@ -223,7 +223,7 @@ dogs_rec_sample <- dogs_rec %>% sample_n(50000)
   ggplot() +
   geom_histogram(data = cats_rec, aes(x = drawing_time_pause / 1000, y = (..count..)/sum(..count..)), alpha = 0.6, fill = 'red', binwidth = 1) +
   geom_histogram(data = dogs_rec, aes(x = drawing_time_pause / 1000, y = (..count..)/sum(..count..)), alpha = 0.6, fill = 'blue', binwidth = 1) +
-  #scale_x_continuous(limits = c(0, 30)) + 
+  scale_x_continuous(limits = c(0, 25)) + 
   scale_y_continuous(labels = scales::percent) +
   labs(title = "Distribution of Pause Seconds Taken for Drawing a cat vs a dog", y = "", x = "Drawing Time (sec)")
 ```
@@ -261,6 +261,22 @@ cats_rec %>%
   
 ```
 
+```{r}
+cats_rec %>% filter(drawing_time_pause_seconds < 20) %>%
+  ggplot(aes(x = drawing_time_pause_seconds, y = stroke_count)) + 
+  geom_point(alpha = 1 / 10) +
+  geom_smooth(method='lm')
+```
+
+```{r}
+cats_rec_filtered <- cats_rec %>% filter(drawing_time_pause_seconds < 20)
+
+```
+
+```{r}
+fit <- lm(drawing_time_pause_seconds ~ stroke_count , data = cats_rec_filtered)
+summary(fit)
+```
 
 
 
