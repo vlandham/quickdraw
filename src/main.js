@@ -2,6 +2,7 @@ import * as d3 from 'd3';
 
 import createDraw from './draw';
 import createHist from './hist';
+import createSwarm from './swarm';
 
 import '../index.html';
 import './style';
@@ -15,6 +16,7 @@ function pullOutDogs(dogCat) {
       dr.time = key;
       return dr;
     });
+  console.log(dogDrawings)
   return [{ key: 'dog', drawings: dogDrawings }];
 }
 
@@ -47,6 +49,16 @@ function displaySmallMults(error, birds, bugs, shapes) {
     .height(200)
     .keys(null)
     .overlap(false)('#shapes', '#shapes-draw', shapes);
+}
+
+function displaySwarm(error, stats) {
+  const swarm = createSwarm()
+  swarm('#swarm', '#swarm-draw', stats);
+
+  d3.select('#swarm-select').on('change', function() {
+    console.log(this.value)
+    swarm.switch(this.value)
+  })
 }
 
 function display(error, dogCat) {
@@ -90,3 +102,7 @@ d3.queue()
   .defer(d3.json, 'data/ant_mosquito_butterfly_scorpion_out.json')
   .defer(d3.json, 'data/circle_squiggle_triangle_square_out.json')
   .await(displaySmallMults);
+
+d3.queue()
+  .defer(d3.json, 'data/all_aggregates_with_doodles.json')
+  .await(displaySwarm);
