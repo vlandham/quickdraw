@@ -3,9 +3,9 @@ import createDraw from './draw';
 import beeswarm from './util/beeswarm';
 
 export default function createSwarm() {
-  let width = 800;
+  let width = 780;
   let height = 750;
-  const margin = { top: 10, right: 40, bottom: 10, left: 40 };
+  const margin = { top: 20, right: 50, bottom: 50, left: 40 };
   let g = null;
   let svg = null;
   let data = [];
@@ -42,8 +42,9 @@ export default function createSwarm() {
   function fixData(rdata) {
     rdata.forEach(d => {
       d.key = d.word;
-      d.icon = d.drawings[0];
+      // d.icon = d.drawings[0];
       d.drawings = d.drawings.map(d => ({ drawing: d }))
+      d.iconIndex = 0;
     });
     return rdata;
   }
@@ -70,7 +71,6 @@ export default function createSwarm() {
   function update() {
     updateScales();
     const swarm = updateSwarm();
-    console.log(swarm)
 
     let doodle = g.selectAll('.doodle')
       .data(swarm, d => d.datum.word)
@@ -80,7 +80,8 @@ export default function createSwarm() {
       .attr('class', 'doodle')
       .attr('transform', `translate(${width / 2}, ${height / 2})`)
       .on('mouseover', mouseover)
-      .on('mouseout', mouseout);
+      .on('mouseout', mouseout)
+      .on('click', mouseclick);
 
     doodleE.append('circle')
       .attr('class', 'background')
@@ -95,7 +96,7 @@ export default function createSwarm() {
       .attr('transform', `translate(${-radius / 2}, ${-radius / 2}) scale(${scale})`)
 
     const paths = panel.selectAll('.stroke')
-        .data(d => d.datum.icon)
+        .data(d => d.datum.drawings[d.datum.iconIndex].drawing)
         .enter()
         .append('path')
         .classed('stroke', true)
@@ -139,6 +140,7 @@ export default function createSwarm() {
     gr.append('text')
       .attr('x', 0)
       .attr('class', 'dot-text')
+      .attr('pointer-events', 'none')
       .attr('y', expandR + 10)
       .attr('text-anchor', 'middle')
       .text(d.datum.word);
@@ -146,6 +148,7 @@ export default function createSwarm() {
     gr.append('text')
       .attr('x', 0)
       .attr('class', 'dot-text')
+      .attr('pointer-events', 'none')
       .attr('y', expandR + 25)
       .attr('text-anchor', 'middle')
       .text(d.datum[positionKey] + suffixFor(positionKey));
@@ -175,6 +178,25 @@ export default function createSwarm() {
       .attr('r', radius)
       .attr('opacity', 0.8)
       .attr('stroke-width', 1);
+  }
+
+  function mouseclick(d) {
+    d.datum.iconIndex = (d.datum.iconIndex + 1) % d.datum.drawings.length;
+    const gr = d3.select(this);
+    gr.select('.panel')
+      .selectAll('.stroke').remove();
+    gr.select('.panel')
+      .selectAll('.stroke')
+        .data(d.datum.drawings[d.datum.iconIndex].drawing)
+        .enter()
+        .append('path')
+        .classed('stroke', true)
+        .style('fill', 'none')
+        .style('pointer-events', 'none')
+        .style('stroke', 'black')
+        .style('stroke-width', 8)
+        .attr('d', line);
+
   }
 
   chart.switch = function setKey(value) {

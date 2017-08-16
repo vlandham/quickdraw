@@ -16,7 +16,6 @@ function pullOutDogs(dogCat) {
       dr.time = key;
       return dr;
     });
-  console.log(dogDrawings)
   return [{ key: 'dog', drawings: dogDrawings }];
 }
 
@@ -56,9 +55,8 @@ function displaySwarm(error, stats) {
   swarm('#swarm', '#swarm-draw', stats);
 
   d3.select('#swarm-select').on('change', function() {
-    console.log(this.value)
-    swarm.switch(this.value)
-  })
+    swarm.switch(this.value);
+  });
 }
 
 function display(error, dogCat) {

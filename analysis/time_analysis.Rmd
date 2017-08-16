@@ -5,7 +5,23 @@ output: html_notebook
 
 ```{r}
 library(tidyverse)
+library(ggplot2)
+library(ggjoy)
+library(stringr)
+library(forcats)
 ```
+
+```{r}
+metafile <- './quickdraw classification.csv'
+meta <- read_csv(metafile, skip = 1)
+name_parts <- str_split_fixed(meta$name, coll("."), 2)
+meta$basename <- name_parts[, 1]
+```
+
+```{r}
+bugs <- meta %>% filter(bug == TRUE)
+```
+
 
 ```{r}
 filename <- 'data/dog.stats.csv'
@@ -67,7 +83,6 @@ dogs %>% filter(recognized == 'True') %>%  filter(drawing_time_draw_seconds < 25
   scale_y_continuous(labels = scales::percent) +
   scale_x_continuous(limits = c(0,20)) +
   labs(title = "", y = "", x = "")
-#ggsave('dog_10.png', width = 7, height = 4)
 ```
 
 ```{r}
@@ -88,6 +103,15 @@ cats %>% filter(recognized == 'True') %>%
 ```{r}
 dogs_cats <- rbind(dogs, cats)
 ```
+
+```{r}
+dogs_cats %>% filter(drawing_time_draw_seconds <= 20) %>%
+  ggplot(aes(x = drawing_time_draw_seconds, y = word))+
+  geom_joy(scale = 4) + theme_joy() +
+  scale_y_discrete(expand = c(0.01, 0)) +
+  scale_x_continuous(expand = c(0, 0))
+```
+
 
 ```{r}
 dogs_cats_rec_sum <- dogs_cats %>% group_by(word, recognized) %>% summarise(count = n()) %>% mutate(freq = count / sum(count))
@@ -132,7 +156,7 @@ summary(cats_rec$drawing_time_pause_seconds)
 ggplot() +
   geom_histogram(data = cats_rec, aes(x = drawing_time_seconds, y = (..count..)/sum(..count..)), alpha = 0.6, fill = 'red', binwidth = 1) +
   geom_histogram(data = dogs_rec, aes(x = drawing_time_seconds, y = (..count..)/sum(..count..)), alpha = 0.6, fill = 'blue', binwidth = 1) +
-  #scale_x_continuous(limits = c(0, 30)) + 
+  scale_x_continuous(limits = c(0, 30)) + 
   scale_y_continuous(labels = scales::percent) +
   labs(title = "Distribution of Total Seconds Taken for Drawing a cat vs a dog", y = "", x = "Drawing Time (sec)")
   
@@ -320,10 +344,298 @@ dogs_rec_top_countries %>% filter(drawing_time_pause_seconds < 15) %>%
 ```
 
 
+# Category sub-sections
+
+```{r}
+read_names <- function (names) {
+  data_path <- './data/'
+  all_cates <- vector("list", nrow(names))  
+  
+  for(i in 1:nrow(names)) {
+    name_file <- names[i, "basename"]
+    full_path <- paste(data_path, name_file, ".stats.csv", sep='')
+    name <- read_csv(full_path)
+    all_cates[[i]] <- name
+  }
+  
+  all_cates_df <- do.call("rbind", all_cates)
+  
+  all_cates_df_clean <- prepare_data(all_cates_df)
+
+  all_cates_df_clean_rec <- all_cates_df_clean %>% filter(recognized == 'True')
+  
+  return(all_cates_df_clean_rec)
+  
+}
+```
+
+```{r}
+all_bugs_df <- read_names(bugs)
+```
+
+```{r}
+bugs_agg <- all_bugs_df %>% group_by(word) %>% summarise(count = n(),
+            stroke_count_mean = mean(stroke_count),
+            stroke_count_med = median(stroke_count),
+            drawing_time_pause_sec_mean = mean(drawing_time_pause_seconds), 
+            drawing_time_pause_sec_med = median(drawing_time_pause_seconds), 
+            drawing_time_draw_sec_mean = mean(drawing_time_draw_seconds), 
+            drawing_time_draw_sec_med = median(drawing_time_draw_seconds)) %>%
+  arrange(-drawing_time_draw_sec_mean)
+```
+
+
+```{r, fig.height=6, fig.width=4}
+all_bugs_df %>% 
+ggplot(aes(x = drawing_time_draw_seconds, y = factor(word, levels = bugs_agg$word), fill = factor(word, levels = bugs_agg$word))) +
+geom_joy(size = 0.55 ) +
+  theme_joy() +
+  scale_x_continuous(limits=c(1, 20), expand = c(0.01, 0)) +
+  scale_y_discrete(expand = c(0.01, 0)) + 
+  scale_fill_brewer(guide = FALSE, palette = "Greys", direction = -1) + 
+  labs(title = 'Bugs', x = '', y = '')
+ggsave('bugs.png', width = 8, height = 12)
+```
+
+```{r, message=FALSE}
+fruits <- meta %>% filter(fruit == TRUE)
+all_fruits <- read_names(fruits)
+```
+
+```{r}
+fruits_agg <- all_fruits %>% group_by(word) %>% summarise(count = n(),
+            stroke_count_mean = mean(stroke_count),
+            stroke_count_med = median(stroke_count),
+            drawing_time_pause_sec_mean = mean(drawing_time_pause_seconds), 
+            drawing_time_pause_sec_med = median(drawing_time_pause_seconds), 
+            drawing_time_draw_sec_mean = mean(drawing_time_draw_seconds), 
+            drawing_time_draw_sec_med = median(drawing_time_draw_seconds)) %>%
+  arrange(-drawing_time_draw_sec_mean)
+```
+
+
+```{r, fig.height=6, fig.width=4}
+all_fruits %>% 
+ggplot(aes(x = drawing_time_draw_seconds, y = factor(word, levels = fruits_agg$word), fill = factor(word, levels = fruits_agg$word))) +
+geom_joy(size = 0.55 ) +
+  theme_joy() +
+  scale_x_continuous(limits=c(1, 20), expand = c(0.01, 0)) +
+  scale_y_discrete(expand = c(0.01, 0)) + 
+  scale_fill_brewer(guide = FALSE, palette = "Oranges", direction = -1) + 
+  labs(title = 'Fruits', x = '', y = '')
+ggsave('fruits.png', width = 8, height = 12)
+```
+
+```{r}
+all_fruits %>% filter(word == "banana") %>%
+  ggplot(aes(x = drawing_time_draw_seconds)) +
+  geom_histogram(binwidth = 0.1) + 
+  scale_x_continuous(limits = c(0, 20))
+```
+
+
+```{r}
+all_fruits %>% filter(word == "banana") %>%
+  ggplot(aes(x = drawing_time)) +
+  geom_histogram(binwidth = 100) +
+  scale_x_continuous(limits = c(0, 20000))
+```
+
+```{r}
+all_fruits %>% filter(word == "banana") %>%
+  ggplot(aes(x = stroke_count)) +
+  geom_histogram(binwidth = 1) 
+  #scale_x_continuous(limits = c(0, 20))
+```
+
+
+
+```{r}
+bananas <- all_fruits %>% filter(word == "banana")
+```
+
+```{r}
+bananas$round_time <- round(bananas$drawing_time_seconds, 1)
+```
+
+
+```{r}
+bananas %>%
+  ggplot(aes(x = round_time )) +
+  geom_histogram(binwidth = 0.1) +
+  scale_x_continuous(limits = c(0.5, 8))
+
+```
+
+
+```{r}
+bananas %>% filter(round_time < 20) %>%
+  ggplot(aes(x = round_time, y = stroke_count)) +
+  geom_point()
+```
+
+```{r}
+bananas_by_time <- bananas %>% group_by(round_time, stroke_count) %>% summarise(n = n()) %>% mutate(freq = n / sum(n))
+```
+
+```{r}
+bananas_by_time %>% filter(round_time < 20) %>% filter(stroke_count < 10) %>%
+  ggplot(aes(x = round_time, fill = factor(stroke_count), y = freq)) +
+  geom_bar(stat = 'identity')
+```
+
+
+
+```{r, message=FALSE}
+animals_meta <- meta %>% filter(animal == TRUE)
+all_animals <- read_names(animals_meta)
+
+library(RColorBrewer)
+```
+
+```{r}
+animals_agg <- all_animals %>% group_by(word) %>% summarise(count = n(),
+            stroke_count_mean = mean(stroke_count),
+            stroke_count_med = median(stroke_count),
+            drawing_time_pause_sec_mean = mean(drawing_time_pause_seconds), 
+            drawing_time_pause_sec_med = median(drawing_time_pause_seconds), 
+            drawing_time_draw_sec_mean = mean(drawing_time_draw_seconds), 
+            drawing_time_draw_sec_med = median(drawing_time_draw_seconds)) %>%
+  arrange(-drawing_time_draw_sec_mean)
+```
+
+```{r, fig.height=6, fig.width=4}
+all_animals %>% 
+ggplot(aes(x = drawing_time_draw_seconds, y = factor(word, levels = animals_agg$word), fill = factor(word, levels = animals_agg$word))) +
+geom_joy(size = 0.55 ) +
+  theme_joy() +
+  scale_x_continuous(limits=c(1, 18), expand = c(0.01, 0)) +
+  scale_y_discrete(expand = c(0.01, 0)) + 
+  #scale_fill_brewer(guide = FALSE, palette = "YlGnBu", direction = -1) + 
+  scale_fill_manual(values=rep(brewer.pal(6,"GnBu"),times=9), guide = FALSE) +
+  labs(title = 'Animals', x = '', y = '')
+ggsave('animals.png', width = 8, height = 12)
+```
+
+
+```{r, message=FALSE}
+all_cates <- read_names(meta)
+```
+
+
+```{r}
+all_agg <- all_cates %>% group_by(word) %>% summarise(n = n(),
+            scount_me = mean(stroke_count),
+            scount_md = median(stroke_count),
+            d_pause_me = mean(drawing_time_pause_seconds), 
+            d_pause_md = median(drawing_time_pause_seconds), 
+            d_draw_me = mean(drawing_time_draw_seconds), 
+            d_draw_md = median(drawing_time_draw_seconds),
+            d_total_md = median(drawing_time_seconds),
+            d_total_me = mean(drawing_time_seconds)) %>%
+  arrange(-d_draw_me)
+```
+
+
+```{r}
+all_agg %>%
+  ggplot(aes(x = drawing_time_draw_sec_mean, y = drawing_time_draw_sec_med)) +
+  geom_point()
+```
+
+```{r}
+library(ggbeeswarm)
+```
+
+
+```{r}
+all_agg %>% 
+  ggplot(aes(x = drawing_time_draw_sec_med, y = '')) + 
+  geom_beeswarm(groupOnX = FALSE, cex=2.8, size = 2) +
+  labs(x = '', y = '')
+  #geom_quasirandom(groupOnX = FALSE, varwidth = TRUE)
+  
+```
+
+```{r}
+write_csv(all_agg, 'all_aggregates.csv')
+```
+
+
+# All Categories
+
+```{r}
+data_path <- './data/'
+stat_files <- list.files(path = data_path, pattern = '\\.stats\\.csv')
+length(stat_files)
+all_cates <- vector("list",length(stat_files))
+length(all_cates)
+```
+
+
+```{r, message=FALSE, warning=FALSE}
+for(i in 1:length(stat_files)) {
+  stat_file <- stat_files[i]
+  full_path <- paste(data_path, stat_file, sep='')
+  print(full_path)
+  cate_org <- read_csv(full_path)
+  cate <- prepare_data(cate_org)
+  all_cates[[i]] <- cate
+  
+}
+```
+
+
+```{r}
+all_cates_df <- do.call("rbind", all_cates)
+```
+
+```{r}
+all_cates_df_clean <- prepare_data(all_cates_df)
+```
+
+
+```{r}
+all_cates_df_clean_rec <- all_cates_df_clean %>% filter(recognized == 'True')
+```
+
+
+
+```{r}
+all_cates_mean <- all_cates_df_clean_rec %>% group_by(word) %>% 
+  summarise(count = n(),
+            stroke_count_mean = mean(stroke_count),
+            stroke_count_med = median(stroke_count),
+            drawing_time_pause_sec_mean = mean(drawing_time_pause_seconds), 
+            drawing_time_pause_sec_med = median(drawing_time_pause_seconds), 
+            drawing_time_draw_sec_mean = mean(drawing_time_draw_seconds), 
+            drawing_time_draw_sec_med = median(drawing_time_draw_seconds)) %>%
+  arrange(-drawing_time_draw_sec_mean)
+```
+
+
+```{r, fig.height=6, fig.width=4}
+
+all_cates_df_clean_rec$word <- factor(all_cates_df_clean_rec$word, levels = all_cates_df_clean_rec$word[order(all_cates_df_clean_rec$word)])
+
+
+all_cates_df_clean_rec %>% filter(drawing_time_draw_seconds <= 20) %>%
+  ggplot(aes(x = drawing_time_draw_seconds, y = word ))+
+  geom_joy(scale = 4) + theme_joy()
+```
+
+
+```{r}
+all_cates_df %>% filter(word == 'dog') %>% count()
+```
 
 
 
 
-
-
+```{r}
+all_cates_df_clean_rec %>% filter(word == 'dog') %>% filter(drawing_time_draw_seconds <= 20) %>%
+ ggplot(aes(x = drawing_time_draw_seconds)) +
+  geom_histogram(binwidth = 1) + 
+  labs(title = "Histogram of Drawing Time")
+```
 
