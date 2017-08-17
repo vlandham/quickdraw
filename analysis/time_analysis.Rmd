@@ -76,13 +76,15 @@ dogs %>% filter(recognized == 'True') %>%  filter(drawing_time_draw_seconds < 25
 
 
 ```{r}
-dogs %>% filter(recognized == 'True') %>%  filter(drawing_time_draw_seconds < 25) %>%
-  ggplot(aes(x = drawing_time_draw_seconds, y = (..count..)/sum(..count..))) +
-  geom_histogram(binwidth = 5, fill = "#607d8b") +
-  theme_light() +
+dogs %>% filter(recognized == 'True') %>%  filter(drawing_time_seconds < 25) %>%  #filter(stroke_count < 4) %>%
+  ggplot(aes(x = drawing_time_seconds, y = (..count..)/sum(..count..))) +
+  geom_histogram(binwidth = 0.1, fill = "#607d8b") +
   scale_y_continuous(labels = scales::percent) +
   scale_x_continuous(limits = c(0,20)) +
-  labs(title = "", y = "", x = "")
+  labs(title = "Dog Total Drawing Time", y = "", x = "") +
+  theme_joy()
+
+ggsave("dog_total.png", width = 6, height = 5)
 ```
 
 ```{r}
@@ -428,9 +430,13 @@ ggsave('fruits.png', width = 8, height = 12)
 
 ```{r}
 all_fruits %>% filter(word == "banana") %>%
-  ggplot(aes(x = drawing_time_draw_seconds)) +
-  geom_histogram(binwidth = 0.1) + 
-  scale_x_continuous(limits = c(0, 20))
+  ggplot(aes(x = drawing_time_seconds,  y = (..count..)/sum(..count..))) +
+  geom_histogram(binwidth = 0.1, fill = "#FFD600") + 
+  scale_x_continuous(limits = c(0, 20)) + 
+  scale_y_continuous(labels = scales::percent) +
+  theme_joy()  + 
+  labs(title = "Banana Total Drawing Time", x = "", y = "")
+ggsave("banana_total.png", width = 6, height = 5)
 ```
 
 
@@ -448,10 +454,32 @@ all_fruits %>% filter(word == "banana") %>%
   #scale_x_continuous(limits = c(0, 20))
 ```
 
+```{r}
+all_fruits %>% filter(stroke_count < 5) %>%
+  ggplot(aes(x = drawing_time)) +
+  geom_histogram(binwidth = 100) +
+  scale_x_continuous(limits = c(0, 20000))
+```
 
 
 ```{r}
+all_cates %>% #filter(stroke_count < 5) %>%
+  ggplot(aes(x = drawing_time_seconds,  y = (..count..)/sum(..count..))) +
+  geom_histogram(binwidth = 1) +
+  scale_y_continuous(labels = scales::percent) +
+  scale_x_continuous(limits = c(0, 10)) + 
+  theme_joy() +
+  labs(title = "All Categories Total Drawing Time (binwidth = 1)", y = '', x = '')
+ggsave('all_total_1.png', width = 6, height = 5)
+```
+
+```{r}
 bananas <- all_fruits %>% filter(word == "banana")
+```
+
+
+```{r}
+pears <- all_fruits %>% filter(word == 'pear')
 ```
 
 ```{r}
@@ -460,19 +488,102 @@ bananas$round_time <- round(bananas$drawing_time_seconds, 1)
 
 
 ```{r}
-bananas %>%
-  ggplot(aes(x = round_time )) +
+bananas %>% filter(recognized == 'True') %>%
+  ggplot(aes(x = drawing_time_draw_seconds )) +
   geom_histogram(binwidth = 0.1) +
   scale_x_continuous(limits = c(0.5, 8))
 
 ```
 
+```{r}
+ggplot() +
+  geom_histogram(data = bananas, aes(x = drawing_time_seconds, y = (..count..)/sum(..count..)), alpha = 1.0, fill = "#FFD600", binwidth = 0.1) +
+  geom_histogram(data = all_fruits %>% filter(stroke_count < 5), aes(x = drawing_time_seconds, y = (..count..)/sum(..count..)), alpha = 0.6, fill = 'black', binwidth = 0.1) +
+  #geom_histogram(data = dogs, aes(x = drawing_time_seconds, y = (..count..)/sum(..count..)), alpha = 0.6, fill = 'blue', binwidth = 0.1) +
+  scale_x_continuous(limits = c(0, 10), breaks = seq(0,10,0.5)) + 
+  scale_y_continuous(labels = scales::percent) +
+  labs(title = "Banana vs All Fruit Drawing Time (binwidth = 0.1)", y = "", x = "Drawing Time (secs)") +
+  theme_light()
+ggsave("bananas_vs_fruit.png", width = 6, height = 5) 
+```
 
 ```{r}
-bananas %>% filter(round_time < 20) %>%
-  ggplot(aes(x = round_time, y = stroke_count)) +
-  geom_point()
+mean(all_fruits$drawing_time_seconds)
+mean(dogs$drawing_time_seconds)
 ```
+
+
+```{r}
+
+getmode <- function(v) {
+   uniqv <- unique(v)
+   uniqv[which.max(tabulate(match(v, uniqv)))]
+}
+
+
+getmode(bananas$drawing_time_seconds)
+```
+```{r}
+bananas_two_sec <- bananas %>% filter(drawing_time_seconds > 2.5) %>% filter(drawing_time_seconds < 3.0)
+```
+
+```{r}
+summary()
+```
+
+
+```{r}
+bananas_two_sec %>%
+  ggplot(aes(x =  factor(stroke_count))) +
+  geom_bar()
+```
+
+
+
+```{r}
+bananas %>% filter(stroke_count < 4) %>%
+  ggplot(aes(x = drawing_time_seconds)) +
+  geom_histogram(binwidth = 0.5) +
+  scale_x_continuous(limits = c(1, 8)) + 
+  facet_wrap(~ stroke_count)
+```
+
+```{r}
+pears %>% filter(stroke_count < 6) %>%
+  ggplot(aes(x = drawing_time_seconds)) +
+  geom_histogram(binwidth = 0.5) +
+  scale_x_continuous(limits = c(0, 10)) + 
+  facet_wrap(~ stroke_count)
+```
+
+
+```{r}
+dogs %>% filter(stroke_count < 4) %>% filter(drawing_time_seconds < 20) %>% filter(recognized == 'True')  %>%
+  ggplot(aes(x = drawing_time_seconds)) +
+  geom_histogram(binwidth = 0.1) +
+  scale_x_continuous(limits = c(4, 11)) +
+  facet_wrap(~ stroke_count)
+```
+
+```{r}
+dogs_m <- dogs %>% mutate(sec = floor(drawing_time_seconds), time_in_sec = drawing_time_seconds - sec)
+```
+
+
+```{r}
+dogs_m %>% filter(stroke_count < 4) %>% filter(sec %in% c(4,5,6,7,8,9, 10, 11, 12, 13, 14, 15)) %>%
+  ggplot(aes(x = time_in_sec)) +
+  geom_histogram(binwidth = 0.01) +
+  #scale_x_continuous(limits = c(1, 20)) +
+  facet_wrap(~ sec)
+```
+
+```{r}
+dogs %>% filter(stroke_count < 4) %>% filter(drawing_time_seconds < 20) %>%
+  ggplot(aes(x = drawing_time_seconds)) +
+  geom_area()
+```
+
 
 ```{r}
 bananas_by_time <- bananas %>% group_by(round_time, stroke_count) %>% summarise(n = n()) %>% mutate(freq = n / sum(n))
@@ -536,6 +647,19 @@ all_agg <- all_cates %>% group_by(word) %>% summarise(n = n(),
   arrange(-d_draw_me)
 ```
 
+
+```{r}
+all_agg_rec <- all_cates %>% filter(recognized == 'True') %>% group_by(word) %>% summarise(n = n(),
+            scount_me = mean(stroke_count),
+            scount_md = median(stroke_count),
+            d_pause_me = mean(drawing_time_pause_seconds), 
+            d_pause_md = median(drawing_time_pause_seconds), 
+            d_draw_me = mean(drawing_time_draw_seconds), 
+            d_draw_md = median(drawing_time_draw_seconds),
+            d_total_md = median(drawing_time_seconds),
+            d_total_me = mean(drawing_time_seconds)) %>%
+  arrange(-d_draw_me)
+```
 
 ```{r}
 all_agg %>%
