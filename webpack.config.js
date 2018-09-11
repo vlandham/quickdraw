@@ -13,6 +13,9 @@ if(minimize) {
 }
 
 module.exports = {
+  externals:[{
+    xmlhttprequest: '{XMLHttpRequest:XMLHttpRequest}'
+  }],
   entry: {
     javascript: './src/main.js'
   },
