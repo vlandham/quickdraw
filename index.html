@@ -2,48 +2,53 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>How Long Does it Take to (Quick) Draw a Dog?</title>
   <meta name="description" content="An exploration of drawing time in Google's Quickdraw dataset">
   <meta name="author" content="Jim Vallandingham">
+  <link rel="canonical" href="https://vallandingham.me/quickdraw/">
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@vlandham">
   <meta name="twitter:creator" content="@vlandham">
   <meta name="twitter:title" content="How Long Does it Take to (Quick) Draw a Dog?">
   <meta name="twitter:description" content="An exploration of drawing time in Google's Quickdraw dataset">
-  <meta name="twitter:image:src" content="http://vallandingham.me/quickdraw/img/twitter.png">
+  <meta name="twitter:image:src" content="https://vallandingham.me/quickdraw/img/twitter.png">
 
-  <meta property="og:url" content="http://vallandingham.me/quickdraw/" />
+  <meta property="og:url" content="https://vallandingham.me/quickdraw/" />
   <meta property="og:title" content="How Long Does it Take to (Quick) Draw a Dog?" />
   <meta property="og:type" content="article" />
   <meta property="og:description" content="An exploration of drawing time in Google's Quickdraw dataset." />
-  <meta property="og:image" content="http://vallandingham.me/quickdraw/img/twitter.png" />
+  <meta property="og:image" content="https://vallandingham.me/quickdraw/img/twitter.png" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  <link rel="icon" href="favicon.ico">
+  <link rel="preload" href="/fonts/ibm-plex-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="build/app.css">
+  <script type="module" src="build/app.js"></script>
 </head>
 
 <body>
-  <div class="nav">
-    <p>
-      <a href="http://vallandingham.me/">vallandingham.me</a>
-    </p>
-  </div>
+  <header class="site-header">
+    <a class="site-name" href="https://vallandingham.me/">Jim Vallandingham</a>
+    <nav>
+      <a href="https://vallandingham.me/">Writing</a>
+      <a href="https://vallandingham.me/vis">Visualizations</a>
+      <a href="https://vallandingham.me/projects">Projects</a>
+    </nav>
+  </header>
 
   <div class="container">
-    <div id="main" role="main">
+    <main id="main">
       <h1 id="main-title">How Long Does it Take to (Quick) Draw a Dog?</h1>
       <div id="dogs-title"></div>
       <div class="text">
         <p>
-          Google has recently released an amazing dataset of <a href="https://quickdraw.withgoogle.com/data" target="_blank">over 50 million drawings</a> of 345 types of things, ranging from triangles to trombones.
+          Google has recently released an amazing dataset of <a href="https://quickdraw.withgoogle.com/data" target="_blank" rel="noopener">over 50 million drawings</a> of 345 types of things, ranging from triangles to trombones.
 
         </p>
         <p>
-          A number of great analyses have already been created, from <a href="https://qz.com/994486/the-way-you-draw-circles-says-a-lot-about-you/" target="_blank">cultural differences when drawing a circle</a> to <a target="_blank" href="http://colinmorris.github.io/blog/bad_flamingos">finding bad flamingo drawings</a>.
+          A number of great analyses have already been created, from <a href="https://qz.com/994486/the-way-you-draw-circles-says-a-lot-about-you/" target="_blank" rel="noopener">cultural differences when drawing a circle</a> to <a target="_blank" rel="noopener" href="https://colinmorris.github.io/blog/bad_flamingos">finding bad flamingo drawings</a>.
         </p>
         <p>
           In this short visual exploration, we answer a simple question: how long are people spending on drawing these doodles?
@@ -51,7 +56,7 @@
         </p>
       </div>
 
-      <div class="figure" style="width:940px; height:480px;">
+      <div class="figure">
         <div class="graph" id="dog-hist"></div>
         <div id="dog-hist-annotation" class="annotation">
           <p class="title">Distribution of dog drawing times</p>
@@ -68,7 +73,7 @@
 
         <p>
           The above graph shows the distribution of time spent drawing a dog for the <strong>152,000</strong> dog doodles in the Quickdraw dataset.
-          Only dogs correctly recongized by Google's algorithm as a <i>dog</i> are included.
+          Only dogs correctly recognized by Google's algorithm as a <i>dog</i> are included.
         </p>
 
         <p>
@@ -85,7 +90,7 @@
 
       <h2>Dogs and Cats, Drawn Together</h2>
 
-      <div class="figure" style="width:940px; height:480px;">
+      <div class="figure">
         <div class="graph" id="dogcat-hist"></div>
         <div class="annotation">
           <p class="title">Dogs vs cats</p>
@@ -112,57 +117,59 @@
         </p>
       </div>
 
+      <div class="composites">
       <div class="row">
         <div class="six columns">
           <p class="title">100 cats drawn in 0 - 1 seconds</p>
-          <img src="img/cat/cat-1.jpg" />
+          <img loading="lazy" alt="Overlay of 100 cats drawn in 0 - 1 seconds" src="img/cat/cat-1.jpg" />
         </div>
         <div class="six columns">
           <p class="title">100 dogs drawn in 0 - 1 seconds</p>
-          <img src="img/dog/dog-1.jpg" />
+          <img loading="lazy" alt="Overlay of 100 dogs drawn in 0 - 1 seconds" src="img/dog/dog-1.jpg" />
         </div>
       </div>
 
       <div class="row">
         <div class="six columns">
           <p class="title">100 cats drawn in 1 - 2 seconds</p>
-          <img src="img/cat/cat-2.jpg" />
+          <img loading="lazy" alt="Overlay of 100 cats drawn in 1 - 2 seconds" src="img/cat/cat-2.jpg" />
         </div>
         <div class="six columns">
           <p class="title">100 dogs drawn in 1 - 2 seconds</p>
-          <img src="img/dog/dog-2.jpg" />
+          <img loading="lazy" alt="Overlay of 100 dogs drawn in 1 - 2 seconds" src="img/dog/dog-2.jpg" />
         </div>
       </div>
 
       <div class="row">
         <div class="six columns">
           <p class="title">100 cats drawn in 4 - 5 seconds</p>
-          <img src="img/cat/cat-5.jpg" />
+          <img loading="lazy" alt="Overlay of 100 cats drawn in 4 - 5 seconds" src="img/cat/cat-5.jpg" />
         </div>
         <div class="six columns">
           <p class="title">100 dogs drawn in 4 - 5 seconds</p>
-          <img src="img/dog/dog-5.jpg" />
+          <img loading="lazy" alt="Overlay of 100 dogs drawn in 4 - 5 seconds" src="img/dog/dog-5.jpg" />
         </div>
       </div>
 
       <div class="row">
         <div class="six columns">
           <p class="title">100 cats drawn in 9 - 10 seconds</p>
-          <img src="img/cat/cat-10.jpg" />
+          <img loading="lazy" alt="Overlay of 100 cats drawn in 9 - 10 seconds" src="img/cat/cat-10.jpg" />
         </div>
         <div class="six columns">
           <p class="title">100 dogs drawn in 9 - 10 seconds</p>
-          <img src="img/dog/dog-10.jpg" />
+          <img loading="lazy" alt="Overlay of 100 dogs drawn in 9 - 10 seconds" src="img/dog/dog-10.jpg" />
         </div>
+      </div>
       </div>
 
       <div class="text">
         <p>
           We can see the pointy ears and round face of the cat in all these composite images.
-          This is not the case for the dog images. While its harder to make out, we see more horizontal arcs in the dog groups, forming the bodies of many dogs.
+          This is not the case for the dog images. While it's harder to make out, we see more horizontal arcs in the dog groups, forming the bodies of many dogs.
         </p>
         <p>
-          Also, the bottom portions of the dog composites are noticably sparser, as this is where people are drawing legs.
+          Also, the bottom portions of the dog composites are noticeably sparser, as this is where people are drawing legs.
         </p>
         <p>
           Moving on, what if we add one more mammal into the mix?
@@ -170,7 +177,7 @@
         </p>
       </div>
 
-      <div class="figure" style="width:940px; height:480px;">
+      <div class="figure">
         <div class="graph" id="dogcathorse-hist"></div>
         <div class="annotation">
           <p class="title">Dogs vs cats vs horses</p>
@@ -197,11 +204,11 @@
         <p>I was expecting that the doodles that take longer to draw - like horses, would use more strokes. This appears <strong>not</strong> to be the case.</p>
         <p>
           Let's look at the distribution of <strong>stroke counts</strong> now instead of drawing times.
-          To see each distribuition more clearly, I split them up into a small multiple below.
+          To see each distribution more clearly, I split them up into a small multiple below.
         </p>
       </div>
 
-      <div class="figure" style="width:940px; height:480px;">
+      <div class="figure">
         <div class="graph" id="dogcathorse-strokes"></div>
         <div class="annotation">
           <p class="title">Distribution of stroke counts</p>
@@ -212,8 +219,8 @@
           </div>
         </div>
       </div>
-      <div id="dogcathorse-strokes-small"></div>
-      <div id="dogcathorse-strokes-draw"></div>
+      <div class="small-mults" id="dogcathorse-strokes-small"></div>
+      <div class="draw-dock" id="dogcathorse-strokes-draw"></div>
 
       <div class="text">
         <p>Perhaps surprisingly, the stroke count distributions for these three doodles look quite different from one another.</p>
@@ -237,9 +244,10 @@
 
         <p>
           First, a flock of <strong>birds</strong>.
+        </p>
       </div>
       <p class="title">Bird drawing times</p>
-      <div id="birds"></div>
+      <div class="small-mults" id="birds"></div>
       <div class="draw-dock" id="birds-draw"></div>
       <div class="text">
         <p>
@@ -252,7 +260,7 @@
       </div>
 
       <p class="title">Bug drawing times</p>
-      <div id="bugs"></div>
+      <div class="small-mults" id="bugs"></div>
       <div class="draw-dock" id="bugs-draw"></div>
 
       <div class="text">
@@ -264,7 +272,7 @@
       </div>
 
       <p class="title">Shape drawing times</p>
-      <div id="shapes"></div>
+      <div class="small-mults" id="shapes"></div>
       <div class="draw-dock" id="shapes-draw"></div>
 
       <div class="text">
@@ -301,28 +309,32 @@
         </p>
         <p>
           Hopefully this little look at draw times inspires more exploration of this great data set.
-          Thanks to <a href="http://clome.info/">Yannick Assogba</a> for his inspiring <a href="http://clome.info/work/quickdraw/explore/">Quickdraw PCA exploration</a> and Ian Johnson for his <a href="https://bl.ocks.org/enjalot/a2b28f0ed18b891f9fb70910f1b8886d">sample code</a> and work in releasing this dataset.
+          Thanks to <a href="https://clome.info/">Yannick Assogba</a> for his inspiring <a href="https://clome.info/work/quickdraw/explore/">Quickdraw PCA exploration</a> and Ian Johnson for his <a href="https://bl.ocks.org/enjalot/a2b28f0ed18b891f9fb70910f1b8886d">sample code</a> and work in releasing this dataset.
         </p>
         <p>
           This project, and all its analysis code is on <a href="https://github.com/vlandham/quickdraw/">Github</a>.
-          Be sure to check out my other <a href="http://vallandingham.me/vis/">visualizations</a> and <a href="http://vallandingham.me">tutorials</a>!
+          Be sure to check out my other <a href="https://vallandingham.me/vis/">visualizations</a> and <a href="https://vallandingham.me">tutorials</a>!
         </p>
       </div>
-    </div>
-  </div> <!--! end of #container -->
+    </main>
 
-  <script src="build/app.js"></script>
+    <footer class="site-footer">
+      <p>
+        <a href="https://vallandingham.me/">Jim Vallandingham</a>
+        · <a href="https://github.com/vlandham/quickdraw">Source on GitHub</a>
+      </p>
+    </footer>
+  </div>
 
-
+  <!-- Cloudflare Web Analytics (same site token as vallandingham.me); production only -->
   <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-    ga('create', 'UA-17355070-1', 'auto');
-    ga('send', 'pageview');
-
+    if (location.hostname === 'vallandingham.me' || location.hostname === 'www.vallandingham.me') {
+      const beacon = document.createElement('script');
+      beacon.defer = true;
+      beacon.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+      beacon.dataset.cfBeacon = JSON.stringify({ token: '2b4df352ecf04cab9fc322e072c3ef88' });
+      document.body.appendChild(beacon);
+    }
   </script>
 </body>
 </html>

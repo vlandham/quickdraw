@@ -2,26 +2,30 @@
 
 ## About
 
-Source code powering [http://vallandingham.me/quickdraw/](http://vallandingham.me/quickdraw/).
+Source code powering [https://vallandingham.me/quickdraw/](https://vallandingham.me/quickdraw/).## Running
 
-## Running
-
-To setup locally:
+Requires Node 18+. To set up locally:
 
 ```
 npm install
-npm run start
+npm run dev
 ```
 
-To build:
+Then open http://localhost:8000. This serves the repo root and rebuilds `build/app.js` and `build/app.css` from `src/` and `css/` on change.
+
+To build for deployment:
 
 ```
 npm run build
 ```
 
+The site is served by GitHub Pages from the root of `master`, so commit the updated `build/` output.
+
 **Note:**
 
-My Google Analytics code is in `index.html`. Please remove if you are planning on forking this. 
+`index.html` includes the Cloudflare Web Analytics beacon for vallandingham.me. It only loads on that hostname. Remove it if you fork this project.
+
+
 
 
 ## Analysis

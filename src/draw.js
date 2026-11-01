@@ -31,7 +31,9 @@ export default function createDraw() {
     svg = d3.select(selection).select('svg');
     if (svg.size() === 0) {
       svg = d3.select(selection).append('svg')
-        .attr('height', 100);
+        .attr('class', 'responsive')
+        .attr('width', width + margin.left + margin.right)
+        .attr('height', 0);
     }
 
     g = svg.select('.root-group');
@@ -52,9 +54,12 @@ export default function createDraw() {
 
     height = data.length * (panelWidth + tHeight);
 
+    const fullWidth = width + margin.left + margin.right;
+    const fullHeight = height + margin.top + margin.bottom;
     svg
-      .attr('width', width + margin.left + margin.right)
-      .attr('height', height + margin.top + margin.bottom);
+      .attr('width', fullWidth)
+      .attr('height', fullHeight)
+      .attr('viewBox', `0 0 ${fullWidth} ${fullHeight}`);
 
     let rows = g.selectAll('.row')
       .data(data);
@@ -130,7 +135,7 @@ export default function createDraw() {
 
   chart.reanimate = function setReanimate() {
     reanimate();
-  }
+  };
 
   chart.limit = function setLimit(value) {
     if (!arguments.length) { return limit; }
